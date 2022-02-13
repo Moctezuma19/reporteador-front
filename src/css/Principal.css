@@ -1,0 +1,13 @@
+.icon-lateral {
+    height: 8em !important;
+    width: 8em !important;
+}
+
+.icon-lateral:hover {
+    border: 2px green solid;
+    cursor: pointer;
+}
+
+.selected-icon {
+    border: 5px green solid;
+}
