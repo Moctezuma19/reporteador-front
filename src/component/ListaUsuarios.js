@@ -100,8 +100,12 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
                                     }
                                 }}/>
 
-                                {u.rol.idRol !== 1 && <Delete className="icon-users" onClick={(e) => {
-                                    setShowModal(true);
+                                {u.rol.idRol !== 1 &&
+                                <Delete className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
+                                    if (!edita) {
+                                        setShowModal(true);
+                                    }
+
                                 }}/>}
                             </div>
                             <Modal
