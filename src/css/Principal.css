@@ -11,3 +11,10 @@
 .selected-icon {
     border: 5px green solid;
 }
+
+.icon-users:hover {
+    cursor: pointer;
+}
+.icon-users-none:hover {
+    cursor: not-allowed;
+}

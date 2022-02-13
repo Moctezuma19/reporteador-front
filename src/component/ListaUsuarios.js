@@ -1,11 +1,25 @@
-import {Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow} from "@mui/material";
-import {Delete, Settings} from "@mui/icons-material";
+import {
+    Box,
+    Button,
+    Modal,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TablePagination,
+    TableRow
+} from "@mui/material";
+import {Delete, Edit, EditOff} from "@mui/icons-material";
 import React from "react";
+import UsuarioServicio from "../services/UsuarioServicio";
 
-const ListaUsuarios = ({usuarios}) => {
+const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}) => {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [showModal, setShowModal] = React.useState(false);
+    const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -15,9 +29,33 @@ const ListaUsuarios = ({usuarios}) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    React.useEffect(() => {
-        console.log("listUsuarios", usuarios)
-    }, [])
+
+    const handleElimina = (id) => {
+        usuarioServicio.elimina(id).then(({data}) => {
+            if (data) {
+                eliminaUsuario(id);
+                setMessage({text: "El usuario se elimino correctamente.", type: "success"});
+            } else {
+                setMessage({text: "No se pudo elimnar al usuario.", type: "error"});
+            }
+            setShowModal(false);
+        }).catch((error) => {
+            setMessage({text: "No se pudo elimnar al usuario.", type: "error"});
+            setShowModal(false);
+            console.log("error: " + error);
+        });
+    }
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
     return (<Paper elevation={3}>
         <Table size={"medium"}>
             <TableHead>
@@ -56,9 +94,41 @@ const ListaUsuarios = ({usuarios}) => {
                         </TableCell>
                         <TableCell>
                             <div style={{display: "flex"}}>
-                                <Settings/>
-                                {u.rol.idRol !== 1 && <Delete/>}
+                                <Edit className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
+                                    if (!edita) {
+                                        setUsuario(u);
+                                    }
+                                }}/>
+
+                                {u.rol.idRol !== 1 && <Delete className="icon-users" onClick={(e) => {
+                                    setShowModal(true);
+                                }}/>}
                             </div>
+                            <Modal
+                                open={showModal}
+                                onClose={() => {
+                                    setShowModal(false);
+                                }}
+                                aria-labelledby="parent-modal-title"
+                                aria-describedby="parent-modal-description"
+                            >
+                                <Box sx={{...style, width: 600}}>
+                                    <h4 id="parent-modal-title">¿Seguro que deseas eliminar al siguiente usuario?</h4>
+                                    <p id="parent-modal-description">
+                                        {u.nombre + " " + u.apellido + `(${u.correo})`}
+                                    </p>
+                                    <div style={{float: "left"}}>
+                                        <Button variant={"contained"} color={"success"} type={"button"}
+                                                onClick={(e) => {
+                                                    handleElimina(u.idUsuario);
+                                                }}> Eliminar </Button> <span> </span>
+                                        <Button variant={"contained"} color={"success"} type={"button"}
+                                                onClick={(e) => {
+                                                    setShowModal(false);
+                                                }}> Cancelar </Button>
+                                    </div>
+                                </Box>
+                            </Modal>
                         </TableCell>
                     </TableRow>)
 

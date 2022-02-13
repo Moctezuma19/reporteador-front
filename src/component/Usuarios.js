@@ -10,17 +10,14 @@ import {
 import {Delete, PeopleAlt, Settings} from "@mui/icons-material";
 import ListaUsuarios from "./ListaUsuarios";
 import FormUsuario from "./FormUsuario";
+import EditaUsuario from "./EditaUsuario";
 
 const Usuarios = () => {
-    const [seleccion, setSeleccion] = React.useState(0);
+    const [usuario, setUsuario] = React.useState(null);
     const [usuarios, setUsuarios] = React.useState([]);
     const [showLoader, setShowLoader] = React.useState(true);
     const [message, setMessage] = React.useState(null);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
-
-    const handleChangeSeleccion = (event, newValue) => {
-        setSeleccion(newValue);
-    }
 
 
     React.useEffect(() => {
@@ -30,7 +27,7 @@ const Usuarios = () => {
                 setUsuarios(data);
             } else {
                 setMessage({
-                    text: "No se encuentraron usuarios.",
+                    text: "No se encontraron usuarios.",
                     type: "warning"
                 });
             }
@@ -50,6 +47,19 @@ const Usuarios = () => {
         console.log("nuevo usuario", usuarios_)
         setUsuarios(usuarios_);
     }
+    const editaUsuario = (u) => {
+        let idx = usuarios.findIndex(x => x.idUsuario === u.idUsuario);
+        let usuarios_ = [...usuarios];
+        usuarios_[idx] = {...u};
+        setUsuarios(usuarios_);
+    }
+
+    const eliminaUsuario = (id) => {
+        setUsuarios(usuarios.filter(x => x.idUsuario !== id));
+    }
+    const cierraEdita = () => {
+        setUsuario(null);
+    }
 
 
     return (<Box>
@@ -63,19 +73,24 @@ const Usuarios = () => {
                 <CircularProgress color={"success"}/>
                 }
                 {!showLoader && message !== null &&
-                <Alert severity={message.type} onClose={() => {
+                <Alert severity={message.type} style={{marginBottom: 10}} onClose={() => {
                     setMessage(null);
                 }}>
                     {message.text}
                 </Alert>
                 }
                 {usuarios.length > 0 ?
-                    <ListaUsuarios usuarios={usuarios}/> :
+                    <ListaUsuarios usuarios={usuarios} setUsuario={setUsuario} edita={usuario !== null}
+                                   setMessage={setMessage} eliminaUsuario={eliminaUsuario}/> :
                     <h6>Sin usuarios.</h6>
                 }
             </Grid>
             <Grid item xs={4}>
-                <FormUsuario agregaUsuario={agregaUsuario}/>
+                {usuario !== null ?
+                    <EditaUsuario editaUsuario={editaUsuario} usuario_={usuario} cierra={cierraEdita}/>
+                    :
+                    <FormUsuario agregaUsuario={agregaUsuario}/>
+                }
             </Grid>
 
         </Grid>
