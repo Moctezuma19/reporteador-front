@@ -8,7 +8,7 @@ import {
     TableCell,
     TableHead,
     TablePagination,
-    TableRow
+    TableRow, Tooltip
 } from "@mui/material";
 import {Delete, Edit, EditOff} from "@mui/icons-material";
 import React from "react";
@@ -94,19 +94,24 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
                         </TableCell>
                         <TableCell>
                             <div style={{display: "flex"}}>
-                                <Edit className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
-                                    if (!edita) {
-                                        setUsuario(u);
-                                    }
-                                }}/>
+                                <Tooltip title={"Editar"}>
+                                    <Edit className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
+                                        if (!edita) {
+                                            setUsuario(u);
+                                        }
+                                    }}/>
+                                </Tooltip>
 
                                 {u.rol.idRol !== 1 &&
-                                <Delete className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
-                                    if (!edita) {
-                                        setShowModal(true);
-                                    }
+                                <Tooltip title={"Eliminar"}>
+                                    <Delete className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
+                                        if (!edita) {
+                                            setShowModal(true);
+                                        }
 
-                                }}/>}
+                                    }}/>
+                                </Tooltip>
+                                }
                             </div>
                             <Modal
                                 open={showModal}

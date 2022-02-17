@@ -10,14 +10,15 @@ import Icono from "../images/Icono.png";
 import Usuarios from "../component/Usuarios";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate} from "react-router-dom";
+import Incidencia from "../component/Incidencia";
 
 const PrincipalPage = () => {
 
-    const {logout} = useAuthContext();
+    const {user, logout} = useAuthContext();
     const navigate = useNavigate();
 
     const [seleccionado, setSeleccionado] = React.useState(1);
-
+    console.log("user", user);
 
     return (
         <div>
@@ -43,7 +44,7 @@ const PrincipalPage = () => {
                                 </span>
                             </Button>
                         </Box>
-                        <Box>
+                        {user.idRol === 1 && <Box>
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado(2);
                             }}>
@@ -51,7 +52,7 @@ const PrincipalPage = () => {
                                     Usuarios
                                 </span>
                             </Button>
-                        </Box>
+                        </Box>}
                         <Box>
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado((3))
@@ -81,9 +82,8 @@ const PrincipalPage = () => {
 
                 </Grid>
                 <Grid item xs={10} style={{textAlign: "center"}}>
-                    {seleccionado === 2 &&
-                    <Usuarios/>
-                    }
+                    {seleccionado === 1 && <Incidencia/>}
+                    {seleccionado === 2 && <Usuarios/>}
                 </Grid>
                 <Grid item xs={1}>
                 </Grid>
