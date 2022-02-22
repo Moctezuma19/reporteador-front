@@ -16,7 +16,6 @@ const Incidencia = () => {
     React.useEffect(() => {
         incidenciaServicio.obtenTodas(user.idUsuario).then(({data}) => {
             if (typeof data !== "undefined" && data !== null && data.length > 0) {
-                console.log("data", data);
                 setIncidencias(data);
             }
         }).catch((error) => {
@@ -29,17 +28,26 @@ const Incidencia = () => {
         setIncidencias([...incidencias, nuevo]);
     }
 
+    const asignaIncidencia = (usuario) => {
+        let inc = {...selectedIncidencia, asignacion : {usuario: usuario}, estado: 1};
+        let idx = incidencias.findIndex(i => i.idIncidencia === inc.idIncidencia);
+        let incs = [...incidencias];
+        incs[idx] = {...inc};
+        setIncidencias(incs);
+        setSelectedIncidencia(null);
+    }
+
     return (<Grid container spacing={2}>
-        <Grid item xs={7}>
+        <Grid item xs={selectedIncidencia !== null ? 7 : 12}>
             {incidencias.length > 0 &&
             <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
         </Grid>
         <Grid item xs={5}>
             {user.idRol !== 1 && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
             {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 &&
-            <AsignacionIncidencia incidencia={selectedIncidencia}/>}
+            <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={asignaIncidencia}/>}
             {selectedIncidencia !== null && (user.idRol !== 1 || selectedIncidencia.estado !== 0) &&
-            <VistaIncidencia incidencia={selectedIncidencia}/>}
+            <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}/>}
         </Grid>
     </Grid>);
 };

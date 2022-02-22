@@ -17,6 +17,10 @@ class UsuarioServicio {
     elimina(idUsuario) {
         return http.get(baseUrl + `/usuario/elimina/${idUsuario}`);
     }
+
+    obtenIngenieros() {
+        return http.get(baseUrl + "/usuario/ingenieros");
+    }
 }
 
 export default UsuarioServicio;

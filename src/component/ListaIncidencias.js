@@ -1,7 +1,4 @@
 import {
-    Box,
-    Button,
-    Modal,
     Paper,
     Table,
     TableBody,
@@ -35,6 +32,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
     return (<Paper elevation={3}>
         <Table size={"medium"}>
             <TableHead>
@@ -49,7 +47,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <b>Autor</b>
                     </TableCell>}
                     <TableCell>
-                        <b>Creacion</b>
+                        <b>Creación</b>
                     </TableCell>
                     <TableCell>
                         <b>Actualización</b>
@@ -80,7 +78,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                                 "..."}</span></Tooltip>) : <span>{incidencia.titulo}</span>}
                         </TableCell>
                         {user.idRol !== 3 && <TableCell style={{color: "#717675"}}>
-                            null
+                            {incidencia.usuario !== null ? `${incidencia.usuario.nombre} ${incidencia.usuario.apellido}` : "-"}
                         </TableCell>}
                         <TableCell style={{color: "#717675"}}>
                             {fecha(incidencia.creacion)}
@@ -92,7 +90,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                             {fecha(incidencia.cierre)}
                         </TableCell>
                         {user.idRol !== 2 && <TableCell style={{color: "#717675"}}>
-                            null
+                            {incidencia.asignacion !== null ? incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.apellido : "-"}
                         </TableCell>}
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.estado === 0 ?

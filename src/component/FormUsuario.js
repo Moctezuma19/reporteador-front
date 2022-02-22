@@ -189,7 +189,6 @@ const FormUsuario = ({agregaUsuario}) => {
                             </MenuItem>
                         </Select>
                     </FormControl>
-
                 </Box>
                 <Box sx={{paddingLeft: 10, paddingRight: 10, marginTop: 5}}>
                     <Button variant="contained" color="success" type="submit"> Registrar </Button>

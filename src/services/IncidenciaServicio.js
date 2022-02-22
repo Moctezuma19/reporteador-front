@@ -9,6 +9,10 @@ class IncidenciaServicio {
     obtenTodas(idUsuario) {
         return http.get(baseUrl + `/incidencia/todas/${idUsuario}`);
     }
+
+    asigna(idUsuario, idIncidencia) {
+        return http.get(baseUrl + `/incidencia/asigna/${idUsuario}?id=${idIncidencia}`);
+    }
 }
 
 export default IncidenciaServicio;
