@@ -13,6 +13,14 @@ class IncidenciaServicio {
     asigna(idUsuario, idIncidencia) {
         return http.get(baseUrl + `/incidencia/asigna/${idUsuario}?id=${idIncidencia}`);
     }
+
+    obtenRespuestas(idIncidencia) {
+        return http.get(baseUrl + `/incidencia/respuestas/${idIncidencia}`);
+    }
+
+    responde(data) {
+        return http.put(baseUrl + `/incidencia/responde`, data);
+    }
 }
 
 export default IncidenciaServicio;

@@ -10,6 +10,7 @@ import {
 import {NewReleases, ZoomIn} from "@mui/icons-material";
 import React from "react";
 import {useAuthContext} from "../context/AuthenticationContext";
+import {fecha} from "../util/Util";
 
 const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const {user} = useAuthContext();
@@ -18,15 +19,6 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
-    const fecha = (n) => {
-        if (n === null) {
-            return "-";
-        }
-        let d = new Date(n);
-        return `${d.getDate() < 10 ? d.getDate() + "0" : d.getDate()}-`
-            + `${d.getMonth() + 1 < 10 ? (d.getMonth() + 1) + "0" : d.getMonth() + 1}-${d.getFullYear()}`
-    }
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
@@ -41,7 +33,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <b>#</b>
                     </TableCell>
                     <TableCell>
-                        <b>Titulo</b>
+                        <b>Título</b>
                     </TableCell>
                     {user.idRol !== 3 && <TableCell>
                         <b>Autor</b>
@@ -51,9 +43,6 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                     </TableCell>
                     <TableCell>
                         <b>Actualización</b>
-                    </TableCell>
-                    <TableCell>
-                        <b>Cierre</b>
                     </TableCell>
                     {user.idRol !== 2 && <TableCell>
                         <b>Ingeniero</b>
@@ -86,9 +75,6 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <TableCell style={{color: "#717675"}}>
                             {fecha(incidencia.actualizacion)}
                         </TableCell>
-                        <TableCell style={{color: "#717675"}}>
-                            {fecha(incidencia.cierre)}
-                        </TableCell>
                         {user.idRol !== 2 && <TableCell style={{color: "#717675"}}>
                             {incidencia.asignacion !== null ? incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.apellido : "-"}
                         </TableCell>}
@@ -104,7 +90,6 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                                         incidencia.estado === 3 ?
                                             "Pendiente por el usuario" :
                                             "Pendiente por el proveedor"
-
                             }
                         </TableCell>
                         <TableCell>

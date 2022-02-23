@@ -4,7 +4,6 @@ import {Alert, Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Te
 import {Edit, Group, Key, Refresh, Visibility, VisibilityOff} from "@mui/icons-material";
 
 const EditaUsuario = ({editaUsuario, usuario_, cierra}) => {
-    console.log("edita usuario", usuario_);
 
     const [message, setMessage] = React.useState(null)
     const [usuario, setUsuario] = React.useState({
@@ -36,7 +35,6 @@ const EditaUsuario = ({editaUsuario, usuario_, cierra}) => {
         let obj = {...usuario};
         delete obj["password_repeat"];
         delete obj["rol"];
-        console.log("exito", obj);
 
         usuarioServicio.actualiza(obj).then((response) => {
             console.log("data", response)
