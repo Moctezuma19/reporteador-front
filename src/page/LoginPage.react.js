@@ -2,18 +2,18 @@ import * as React from 'react';
 import {
     Box,
     Button,
-    Card,
-    CardContent,
     Grid,
     TextField,
-    Alert
+    Alert, FormControlLabel, Checkbox, Container, CssBaseline, Avatar, Typography, createTheme
 } from "@mui/material";
 
 import "../css/Login.css";
-import {AccountCircle, Key} from "@mui/icons-material";
+import {LockOutlined} from "@mui/icons-material";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate} from 'react-router-dom';
+import {ThemeProvider} from "@emotion/react";
 
+const theme = createTheme();
 const LoginPage = () => {
     const {loginUser} = useAuthContext();
     const navigate = useNavigate();
@@ -27,13 +27,20 @@ const LoginPage = () => {
             setMessage({texto: "Todos los campos son requeridos.", type: "warning"})
             return;
         }
+
+        if (!usuario.match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )) {
+            setMessage({texto: "El correo no es válido.", type: "warning"});
+            return;
+        }
         try {
             let data = await loginUser({correo: usuario, password: password});
             console.log("data", data)
             if (data === null) {
                 setMessage({texto: "El usuario o contraseña son incorrectos.", type: "warning"})
             } else {
-               navigate("/principal")
+                navigate("/principal")
             }
         } catch (error) {
             setMessage({texto: "Error interno del servidor", type: "error"})
@@ -45,43 +52,79 @@ const LoginPage = () => {
             <Grid item xs={4}>
             </Grid>
             <Grid item xs={4}>
-                <Card className="card-login">
-                    <CardContent style={{textAlign: "center"}}>
-                        <form onSubmit={handleSubmit}>
-                            <Box>
-                                <h2>Bienvenido</h2>
-                            </Box>
-                            <Box sx={{display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10}}>
-                                <AccountCircle sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                                <TextField fullWidth label="Usuario" name="username" variant="standard" value={usuario}
-                                           type="email"
-                                           onChange={(e) => {
-                                               setUsuario(e.target.value);
-                                           }}/>
-                            </Box>
-                            <Box sx={{display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10}}>
-                                <Key sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                                <TextField fullWidth label="Contraseña" name="password" type="password"
-                                           variant="standard" value={password}
-                                           onChange={(e) => {
-                                               if (e.target.value.length <= 10) {
-                                                   setPassword(e.target.value);
-                                               }
-                                           }}/>
-                            </Box>
-                            <Box sx={{paddingLeft: 10, paddingRight: 10, marginTop: 5}}>
-                                <Button variant="contained" color="success" type="submit"> Iniciar sesión </Button>
-                            </Box>
+                <ThemeProvider theme={theme}>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline/>
+                        <Box
+                            sx={{
+                                marginTop: 8,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Avatar sx={{m: 1, bgcolor: 'success'}}>
+                                <LockOutlined/>
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Bienvenido
+                            </Typography>
                             {message !== null &&
-                            <Box sx={{marginTop: 3}}><Alert severity={"warning"} onClose={() => {
+                            <Box sx={{marginTop: 3, width: "100%"}}><Alert severity={"warning"} onClose={() => {
                                 setMessage(null);
                             }}>
                                 {message.texto}
                             </Alert>
                             </Box>}
-                        </form>
-                    </CardContent>
-                </Card>
+                            <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Correo electrónico"
+                                    name="email"
+                                    autoComplete="email"
+                                    type="email"
+                                    autoFocus
+                                    value={usuario}
+                                    onChange={(e) => {
+                                        setUsuario(e.target.value);
+                                    }}
+                                />
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Contraseña"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    value={password}
+                                    onChange={(e) => {
+                                        if (e.target.value.length <= 10) {
+                                            setPassword(e.target.value);
+                                        }
+                                    }}
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox value="remember" color="success"/>}
+                                    label="Recordarme"
+                                />
+                                <Button
+                                    type="submit"
+                                    color={"success"}
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                >
+                                    Iniciar Sesión
+                                </Button>
+                            </Box>
+                        </Box>
+                    </Container>
+                </ThemeProvider>
             </Grid>
             <Grid item xs={4}>
             </Grid>

@@ -6,14 +6,15 @@ import {useAuthContext} from "../context/AuthenticationContext";
 import FormRespuesta from "./FormRespuesta";
 import {fecha} from "../util/Util";
 
-const VistaIncidencia = ({incidencia, setIncidencia}) => {
+const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     const {user} = useAuthContext();
     const [respuestas, setRespuestas] = React.useState([]);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
 
     const agregaRespuesta = (nuevo, cierre) => {
-        if(cierre){
+        if (cierre) {
             setIncidencia({...incidencia, estado: 2});
+            editaIncidencia();
         }
         setRespuestas([...respuestas, nuevo]);
     }
@@ -49,7 +50,8 @@ const VistaIncidencia = ({incidencia, setIncidencia}) => {
                     {r.descripcion}
                 </Box>
             </Paper>))}
-        {incidencia.estado !== 2 && user.idRol !== 1 && <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}/>}
+        {incidencia.estado !== 2 && user.idRol !== 1 &&
+        <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}/>}
     </Stack>);
 };
 

@@ -11,6 +11,7 @@ import Usuarios from "../component/Usuarios";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate} from "react-router-dom";
 import Incidencia from "../component/Incidencia";
+import {Ballot, Group, Logout} from "@mui/icons-material";
 
 const PrincipalPage = () => {
 
@@ -20,12 +21,8 @@ const PrincipalPage = () => {
     const [seleccionado, setSeleccionado] = React.useState(1);
     console.log("user", user);
 
-    return (
-        <div>
-            <AppBar style={{backgroundColor: "rgb(130,190,181)"}}>
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters>
-                        <img src={Icono} alt={"logo"} width={30} height={36}/>
+    /*
+    * <img src={Icono} alt={"logo"} width={30} height={36}/>
                         <Typography
                             variant="h5"
                             noWrap
@@ -34,47 +31,43 @@ const PrincipalPage = () => {
                         >
                             Reporteador
                         </Typography>
-                        <Box>
+    * */
+    const selectedStyle = {
+        backgroundColor: "white",
+        color: "black",
+        boxShadow: "rgba(145, 158, 171, 0.16) -2px 4px 6px 0px"
+    }
+    return (
+        <div>
+            <AppBar style={{backgroundColor: "white", boxShadow: "rgba(145, 158, 171, 0.16) 0px 8px 16px 0px"}}>
+                <Container maxWidth="xl" style={{padding: "8px 0px"}}>
+                    <div className="barra">
+                        <div className="barra-hijo">
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado(1);
-                            }}>
-                                {/*<FactCheck/>*/}
-                                <span>
-                                    Incidencias
-                                </span>
+                            }} startIcon={<Ballot/>} style={seleccionado === 1 ? selectedStyle : {}}>
+                                Incidencias
                             </Button>
-                        </Box>
-                        {user.idRol === 1 && <Box>
+                            {user.idRol === 1 &&
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado(2);
-                            }}>
-                                <span>
-                                    Usuarios
-                                </span>
-                            </Button>
-                        </Box>}
-                        <Box>
-                            <Button color={"inherit"} onClick={(e) => {
+                            }} startIcon={<Group/>}
+                                    style={seleccionado === 2 ? {...selectedStyle, marginLeft: 5, marginRight: 5} : { marginLeft: 5, marginRight: 5}}>
+                                Usuarios
+                            </Button>}
+                            {/*<Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado((3))
                             }}>
-                                {/*<Settings/>*/}
-                                <span>
-                                    Configuración
-                                </span>
-                            </Button>
-                        </Box>
-                        <Box>
+                                Configuración
+                            </Button>*/}
                             <Button color={"inherit"} onClick={(e) => {
                                 logout();
                                 navigate("/");
-                            }}>
-                                <span>
-                                    Salir
-                                </span>
+                            }} startIcon={<Logout/>}>
+                                Salir
                             </Button>
-                        </Box>
-                    </Toolbar>
-
+                        </div>
+                    </div>
                 </Container>
             </AppBar>
             <Grid container spacing={1} style={{marginTop: 80}}>

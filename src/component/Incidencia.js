@@ -37,6 +37,15 @@ const Incidencia = () => {
         setSelectedIncidencia(null);
     }
 
+    const editaIncidencia = () => {
+        let inc = {...selectedIncidencia, estado: 2};
+        let idx = incidencias.findIndex(i => i.idIncidencia === inc.idIncidencia);
+        let incs = [...incidencias];
+        incs[idx] = {...inc};
+        setIncidencias(incs);
+        setSelectedIncidencia(null);
+    }
+
     return (<Grid container spacing={2}>
         <Grid item xs={selectedIncidencia !== null ? 7 : 12}>
             {incidencias.length > 0 &&
@@ -47,7 +56,7 @@ const Incidencia = () => {
             {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 &&
             <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={asignaIncidencia}/>}
             {selectedIncidencia !== null && (user.idRol !== 1 || selectedIncidencia.estado !== 0) &&
-            <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}/>}
+            <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={editaIncidencia}/>}
         </Grid>
     </Grid>);
 };

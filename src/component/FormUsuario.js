@@ -3,20 +3,16 @@ import {
     Alert,
     Box,
     Button,
-    CardContent,
     FormControl,
-    IconButton,
     InputLabel, MenuItem,
     Paper,
     Select,
     TextField
 } from "@mui/material";
 import {
-    AccountCircle,
     Edit,
     Group,
     Key,
-    PanoramaFishEye,
     Refresh,
     Visibility,
     VisibilityOff
@@ -86,7 +82,7 @@ const FormUsuario = ({agregaUsuario}) => {
     }
 
     const generateRandomPassword = () => {
-        let p = Math.random().toString(36).substring(2, 10);
+        let p = Math.random().toString(36).substring(2, 12);
         setUsuario({...usuario, password: p, password_repeat: p});
     }
 

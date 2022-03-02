@@ -3,7 +3,7 @@ import './App.css';
 import "tabler-react/dist/Tabler.css";
 import LoginPage from "./page/LoginPage.react";
 import PrincipalPage from "./page/PrincipalPage.react";
-import * as React from "react";
+import React from "react";
 import {useAuthContext} from "./context/AuthenticationContext";
 import Page404 from "./page/404Page";
 
