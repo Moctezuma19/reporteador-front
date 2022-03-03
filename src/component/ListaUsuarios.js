@@ -56,7 +56,7 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
         boxShadow: 24,
         p: 4,
     };
-    return (<Paper elevation={3}>
+    return (<Paper elevation={3} style={{borderRadius: 16}}>
         <Table size={"medium"}>
             <TableHead>
                 <TableRow>

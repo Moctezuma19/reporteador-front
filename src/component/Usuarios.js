@@ -63,10 +63,6 @@ const Usuarios = () => {
 
 
     return (<Box>
-        <div style={{display: "flex", paddingTop: 1}}>
-            <PeopleAlt fontSize={"large"}/>
-            <h1> Usuarios </h1>
-        </div>
         <Grid container spacing={2}>
             <Grid item xs={8}>
                 {showLoader &&

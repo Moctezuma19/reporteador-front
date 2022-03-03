@@ -47,8 +47,8 @@ const FormIncidencia = ({agregaIncidencia}) => {
         });
     }
 
-    return (<Paper>
-        <Accordion>
+    return (<Paper elevation={3} style={{borderRadius: 16}}>
+        <Accordion style={{borderRadius: 16}}>
             <AccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography variant={"h6"}>Nueva incidencia</Typography>
             </AccordionSummary>

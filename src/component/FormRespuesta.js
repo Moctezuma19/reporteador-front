@@ -76,7 +76,7 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
         boxShadow: 24,
         p: 4,
     };
-    return (<Paper style={{textAlign: "left", padding: "1em"}}>
+    return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <form onSubmit={handleSubmitRespuesta}>
             <Box>
                 <TextareaAutosize placeholder={"Introduce la respuesta."}

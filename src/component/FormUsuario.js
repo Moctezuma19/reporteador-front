@@ -53,7 +53,7 @@ const FormUsuario = ({agregaUsuario}) => {
             setMessage({texto: "Las contraseñas deben coincidir", type: "warning"});
         }
 
-        let obj = {...usuario, token: "", idUsuario:0};
+        let obj = {...usuario, token: "", idUsuario: 0};
         delete obj["password_repeat"];
         console.log("exito", obj);
 
@@ -88,7 +88,7 @@ const FormUsuario = ({agregaUsuario}) => {
 
     const boxStyle = {display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10}
 
-    return (<Paper elevation={3}>
+    return (<Paper elevation={3} style={{borderRadius: 16}}>
             <form onSubmit={handleSubmit} style={{paddingTop: 15, paddingBottom: 15}}>
                 <Box>
                     <h2>Nuevo usuario</h2>

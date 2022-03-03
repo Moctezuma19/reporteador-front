@@ -35,7 +35,8 @@ const PrincipalPage = () => {
     const selectedStyle = {
         backgroundColor: "white",
         color: "black",
-        boxShadow: "rgba(145, 158, 171, 0.16) -2px 4px 6px 0px"
+        boxShadow: "rgba(145, 158, 171, 0.16) -2px 4px 6px 0px",
+        fontWeight: "bold"
     }
     return (
         <div>

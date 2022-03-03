@@ -19,12 +19,7 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         setRespuestas([...respuestas, nuevo]);
     }
 
-    const getNombre = (idUsuario) => {
-        if (incidencia.usuario.idUsuario === idUsuario) {
-            return incidencia.usuario.nombre + " " + incidencia.usuario.apellido;
-        }
-        return incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.nombre;
-    }
+
     React.useEffect(() => {
         incidenciaServicio.obtenRespuestas(incidencia.idIncidencia).then(({data}) => {
             if (typeof data !== "undefined" && typeof data !== "string" && data !== null) {
@@ -33,23 +28,9 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         }).catch((error) => {
             console.log("error: " + error);
         });
-    }, []);
+    }, [incidencia]);
     return (<Stack spacing={2}>
-        <DescripcionIncidencia incidencia={incidencia} setIncidencia={setIncidencia}/>
-        {respuestas.length > 0 && respuestas.map((r, k) =>
-            (<Paper key={`r-${k}`} style={{textAlign: "left", padding: "1em"}}>
-                <Box>
-                    <b>Fecha: </b>
-                    {fecha(r.actualizacion)}
-                </Box>
-                <Box>
-                    <b>Responde: </b>
-                    {r.idUsuario === user.idUsuario ? "Tú" : getNombre(r.idUsuario)}
-                </Box>
-                <Box>
-                    {r.descripcion}
-                </Box>
-            </Paper>))}
+        <DescripcionIncidencia incidencia={incidencia} setIncidencia={setIncidencia} respuestas={respuestas}/>
         {incidencia.estado !== 2 && user.idRol !== 1 &&
         <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}/>}
     </Stack>);

@@ -47,12 +47,12 @@ const Incidencia = () => {
     }
 
     return (<Grid container spacing={2}>
-        <Grid item xs={selectedIncidencia !== null ? 7 : 12}>
+        <Grid item xs={12}>
             {incidencias.length > 0 &&
             <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
         </Grid>
-        <Grid item xs={5}>
-            {user.idRol !== 1 && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
+        <Grid item xs={6}>
+            {user.idRol !== 1 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
             {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 &&
             <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={asignaIncidencia}/>}
             {selectedIncidencia !== null && (user.idRol !== 1 || selectedIncidencia.estado !== 0) &&

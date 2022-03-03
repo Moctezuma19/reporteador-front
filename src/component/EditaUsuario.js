@@ -67,7 +67,7 @@ const EditaUsuario = ({editaUsuario, usuario_, cierra}) => {
 
     const boxStyle = {display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10}
 
-    return (<Paper elevation={3}>
+    return (<Paper elevation={3} style={{borderRadius: 16}}>
             <form onSubmit={handleSubmit} style={{paddingTop: 15, paddingBottom: 15}}>
                 <Box>
                     <h2>Edita usuario</h2>
