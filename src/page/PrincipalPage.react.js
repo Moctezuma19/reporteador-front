@@ -6,7 +6,6 @@ import {
     Container, Toolbar, Typography, Button
 } from "@mui/material";
 import "../css/Principal.css";
-import Icono from "../images/Icono.png";
 import Usuarios from "../component/Usuarios";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate} from "react-router-dom";
@@ -19,19 +18,7 @@ const PrincipalPage = () => {
     const navigate = useNavigate();
 
     const [seleccionado, setSeleccionado] = React.useState(1);
-    console.log("user", user);
 
-    /*
-    * <img src={Icono} alt={"logo"} width={30} height={36}/>
-                        <Typography
-                            variant="h5"
-                            noWrap
-                            component="div"
-                            sx={{mr: 2, display: {xs: 'none', md: 'flex'}}}
-                        >
-                            Reporteador
-                        </Typography>
-    * */
     const selectedStyle = {
         backgroundColor: "white",
         color: "black",
@@ -46,14 +33,15 @@ const PrincipalPage = () => {
                         <div className="barra-hijo">
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado(1);
-                            }} startIcon={<Ballot/>} style={seleccionado === 1 ? selectedStyle : {}}>
+                            }} startIcon={<Ballot/>}
+                                    style={seleccionado === 1 ? {...selectedStyle, marginRight: 5} : {marginRight: 5}}>
                                 Incidencias
                             </Button>
                             {user.idRol === 1 &&
                             <Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado(2);
                             }} startIcon={<Group/>}
-                                    style={seleccionado === 2 ? {...selectedStyle, marginLeft: 5, marginRight: 5} : { marginLeft: 5, marginRight: 5}}>
+                                    style={seleccionado === 2 ? {...selectedStyle} : {}}>
                                 Usuarios
                             </Button>}
                             {/*<Button color={"inherit"} onClick={(e) => {
@@ -61,7 +49,7 @@ const PrincipalPage = () => {
                             }}>
                                 Configuración
                             </Button>*/}
-                            <Button color={"inherit"} onClick={(e) => {
+                            <Button color={"inherit"} style={{marginLeft: 5}} onClick={(e) => {
                                 logout();
                                 navigate("/");
                             }} startIcon={<Logout/>}>

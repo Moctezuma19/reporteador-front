@@ -13,7 +13,6 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         }
         return incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.nombre;
     }
-    console.log("respuestas", respuestas)
 
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
@@ -45,17 +44,18 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
             }
             {user.idRol !== 2 && <div>
                 <b>Ingeniero de servicio: </b>
-                {incidencia.asignacion.usuario.nombre + " " + incidencia.usuario.apellido}
+                {incidencia.asignacion !== null ? incidencia.asignacion?.usuario?.nombre + " " + incidencia.asignacion?.usuario?.apellido: "Sin asignar"}
             </div>
             }
 
         </Box>
         <Box>
             <b>Estado: </b>
-            {incidencia.estado === 1 ? <span className="proceso-estado">en proceso</span> :
-                incidencia.estado === 2 ? <span className="cerrado-estado">cerrado</span> :
-                    incidencia.estado === 3 ? <span className="advertencia-estado">pendiente por el usuario</span> :
-                        <span className="advertencia-estado">pendiente por el proveedor</span>
+            {incidencia.estado === 0 ? <span className="exito-estado">abierto</span> :
+                incidencia.estado === 1 ? <span className="proceso-estado">en proceso</span> :
+                    incidencia.estado === 2 ? <span className="cerrado-estado">cerrado</span> :
+                        incidencia.estado === 3 ? <span className="advertencia-estado">pendiente por el usuario</span> :
+                            <span className="advertencia-estado">pendiente por el proveedor</span>
             }
         </Box>
         <Box>
@@ -63,8 +63,8 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
             {incidencia?.descripcion}
         </Box>
         {respuestas?.length > 0 && respuestas?.map((r, k) =>
-            (<React.Fragment>
-                <Box key={`r-${k}`} style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
+            (<React.Fragment key={`r-${k}`}>
+                <Box style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
                     <Box>
                         <b> {r.idUsuario === user.idUsuario ? "Tú" : getNombre(r.idUsuario)}</b>
                         <p style={{color: "rgb(113, 118, 117)"}}>{fecha(r.actualizacion)}</p>

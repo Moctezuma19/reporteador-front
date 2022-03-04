@@ -95,21 +95,23 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
                         <TableCell>
                             <div style={{display: "flex"}}>
                                 <Tooltip title={"Editar"}>
-                                    <Edit className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
-                                        if (!edita) {
-                                            setUsuario(u);
-                                        }
-                                    }}/>
+                                    <Edit className={!edita ? "icon-users" : "icon-users-none"} style={{height: 20}}
+                                          onClick={(e) => {
+                                              if (!edita) {
+                                                  setUsuario(u);
+                                              }
+                                          }}/>
                                 </Tooltip>
 
                                 {u.rol.idRol !== 1 &&
                                 <Tooltip title={"Eliminar"}>
-                                    <Delete className={!edita ? "icon-users" : "icon-users-none"} onClick={(e) => {
-                                        if (!edita) {
-                                            setShowModal(true);
-                                        }
+                                    <Delete className={!edita ? "icon-users" : "icon-users-none"} style={{height: 20}}
+                                            onClick={(e) => {
+                                                if (!edita) {
+                                                    setShowModal(true);
+                                                }
 
-                                    }}/>
+                                            }}/>
                                 </Tooltip>
                                 }
                             </div>
@@ -124,7 +126,7 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
                                 <Box sx={{...style, width: 600}}>
                                     <h4 id="parent-modal-title">¿Seguro que deseas eliminar al siguiente usuario?</h4>
                                     <p id="parent-modal-description">
-                                        {u.nombre + " " + u.apellido + `(${u.correo})`}
+                                        {u.nombre + " " + u.apellido + ` (${u.correo})`}
                                     </p>
                                     <div style={{float: "left"}}>
                                         <Button variant={"contained"} color={"success"} type={"button"}

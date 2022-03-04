@@ -87,6 +87,7 @@ const LoginPage = () => {
                                     autoComplete="email"
                                     type="email"
                                     autoFocus
+                                    color="success"
                                     value={usuario}
                                     onChange={(e) => {
                                         setUsuario(e.target.value);
@@ -101,6 +102,7 @@ const LoginPage = () => {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    color="success"
                                     value={password}
                                     onChange={(e) => {
                                         if (e.target.value.length <= 10) {

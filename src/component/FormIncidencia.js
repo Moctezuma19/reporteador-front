@@ -1,9 +1,8 @@
 import {
     Accordion,
     AccordionDetails,
-    AccordionSummary,
-    Box, Button,
-    Grid, Paper,
+    AccordionSummary, Alert,
+    Box, Button, Paper,
     TextareaAutosize,
     TextField,
     Typography
@@ -16,6 +15,8 @@ import {useAuthContext} from "../context/AuthenticationContext";
 const FormIncidencia = ({agregaIncidencia}) => {
 
     const {user} = useAuthContext();
+    const [message, setMessage] = React.useState(null);
+
     const formIncidencia_ = {
         titulo: "",
         descripcion: ""
@@ -33,16 +34,22 @@ const FormIncidencia = ({agregaIncidencia}) => {
     }
 
     const handleSubmitIncidencia = (e) => {
+        e.preventDefault();
         if (!formIncidencia.titulo || !formIncidencia.descripcion) {
+            setMessage({text: "Todos los campos son requeridos.", type: "warning"})
             return;
         }
 
         incidenciaServicio.crea({...formIncidencia, idUsuario: user.idUsuario}).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
                 agregaIncidencia(data);
-                console.log("exito");
+                setFormIncidencia({...formIncidencia_});
+                setMessage({text: "La incidencia se ha creado con éxito.", type: "success"});
+            } else {
+                setMessage({text: "No se pudo crear la incidencia", type: "error"});
             }
         }).catch((error) => {
+            setMessage({text: "Error interno del servidor", type: "error"});
             console.log("error: " + error);
         });
     }
@@ -53,6 +60,11 @@ const FormIncidencia = ({agregaIncidencia}) => {
                 <Typography variant={"h6"}>Nueva incidencia</Typography>
             </AccordionSummary>
             <AccordionDetails style={{textAlign: "left"}}>
+                {message !== null && <Alert style={{marginBottom: 5}} severity={message.type} onClose={(e) => {
+                    setMessage(null);
+                }}>
+                    {message.text}
+                </Alert>}
                 <form onSubmit={handleSubmitIncidencia}>
                     <Box>
                         <TextField label="Titulo" name="titulo" value={formIncidencia.titulo}
@@ -64,13 +76,14 @@ const FormIncidencia = ({agregaIncidencia}) => {
                                           value={formIncidencia.descripcion}
                                           onChange={handleChangeDescripcion}
                                           maxLength={2048} style={{
-                            width: "41.5em",
+                            width: "50.2em",
                             height: "10em",
                             minHeight: "10em",
-                            maxHeight: "10em"
+                            maxHeight: "10em",
+                            borderRadius: 8
                         }}/>
                     </Box>
-                    <Box style={{marginTop: 10, float: "right"}}>
+                    <Box style={{marginTop: 10, marginBottom: 15, float: "right"}}>
                         <Button type={"submit"} variant={"contained"}
                                 color={"success"}> Enviar </Button>
 

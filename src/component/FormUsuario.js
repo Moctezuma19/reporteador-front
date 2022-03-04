@@ -86,7 +86,7 @@ const FormUsuario = ({agregaUsuario}) => {
         setUsuario({...usuario, password: p, password_repeat: p});
     }
 
-    const boxStyle = {display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10}
+    const boxStyle = {display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10, marginTop: 1}
 
     return (<Paper elevation={3} style={{borderRadius: 16}}>
             <form onSubmit={handleSubmit} style={{paddingTop: 15, paddingBottom: 15}}>
@@ -103,21 +103,24 @@ const FormUsuario = ({agregaUsuario}) => {
                 </Box>}
                 <Box sx={boxStyle}>
                     <Edit sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                    <TextField fullWidth label="Nombre" name="firstname" variant="standard" value={usuario.nombre}
+                    <TextField color="success" fullWidth label="Nombre" name="firstname" variant="standard"
+                               value={usuario.nombre}
                                onChange={(e) => {
                                    handleChangeCampo("nombre", e.target.value);
                                }}/>
                 </Box>
                 <Box sx={boxStyle}>
                     <Edit sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                    <TextField fullWidth label="Apellido" name="lastname" variant="standard" value={usuario.apellido}
+                    <TextField color="success" fullWidth label="Apellido" name="lastname" variant="standard"
+                               value={usuario.apellido}
                                onChange={(e) => {
                                    handleChangeCampo("apellido", e.target.value);
                                }}/>
                 </Box>
                 <Box sx={boxStyle}>
                     <Edit sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                    <TextField fullWidth label="Usuario (correo electrónico)" name="email" variant="standard"
+                    <TextField color="success" fullWidth label="Usuario (correo electrónico)" name="email"
+                               variant="standard"
                                value={usuario.correo}
                                type="email"
                                onChange={(e) => {
@@ -126,7 +129,8 @@ const FormUsuario = ({agregaUsuario}) => {
                 </Box>
                 <Box sx={boxStyle}>
                     <Key sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                    <TextField fullWidth label="Contraseña" name="password" type={!viewPassword ? "password" : "text"}
+                    <TextField color="success" fullWidth label="Contraseña" name="password"
+                               type={!viewPassword ? "password" : "text"}
                                variant="standard" value={usuario.password}
                                onChange={(e) => {
                                    if (e.target.value.length < 10) {
@@ -154,7 +158,7 @@ const FormUsuario = ({agregaUsuario}) => {
                 </Box>
                 <Box sx={boxStyle}>
                     <Key sx={{color: 'action.active', mr: 1, my: 0.5}}/>
-                    <TextField fullWidth label="Confirma contraseña" name="password_r"
+                    <TextField color="success" fullWidth label="Confirma contraseña" name="password_r"
                                type={!viewPassword ? "password" : "text"}
                                variant="standard" value={usuario.password_repeat}
                                onChange={(e) => {
@@ -174,7 +178,7 @@ const FormUsuario = ({agregaUsuario}) => {
                     <Group sx={{color: 'action.active', mr: 1, my: 0.5}}/>
                     <FormControl variant={"standard"} sx={{m: 1, minWidth: 120}}>
                         <InputLabel>Rol</InputLabel>
-                        <Select label={"Rol"} value={usuario.idRol} onChange={(e) => {
+                        <Select color="success" label={"Rol"} value={usuario.idRol} onChange={(e) => {
                             handleChangeCampo("idRol", e.target.value);
                         }}>
                             <MenuItem value={2}>

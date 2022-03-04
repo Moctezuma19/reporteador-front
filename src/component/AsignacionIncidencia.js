@@ -1,5 +1,16 @@
 import React from 'react';
-import {Box, Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Typography} from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    Typography
+} from "@mui/material";
 import UsuarioServicio from "../services/UsuarioServicio";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {Close} from "@mui/icons-material";
@@ -8,19 +19,24 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
 
     const [ingenieros, setIngenieros] = React.useState([]);
     const [idIngeniero, setIdIngeniero] = React.useState(0);
+    const [message, setMessage] = React.useState(null);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
 
     const handleSubmit = () => {
         if (idIngeniero === 0) {
+            setMessage({text: "Tienes que elegir a un ingeniero de servicio.", type: "warning"});
             return;
         }
         incidenciaServicio.asigna(idIngeniero, incidencia.idIncidencia).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                console.log("exito", data);
                 editaIncidencia(data);
+                //setMessage({text: "Se ha asignado la incidencia con éxito.", type: "success"});
+            } else {
+                setMessage({text: "No se pudo asignar la incidencia.", type: "error"});
             }
         }).catch((error) => {
+            setMessage({text: "Error interno del servidor.", type: "error"});
             console.log("error: " + error);
         });
 
@@ -37,7 +53,7 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     }, []);
 
 
-    return (<Paper style={{textAlign: "left", padding: "1em"}}>
+    return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
             <IconButton style={{float: "right"}} onClick={(e) => {
                 setIncidencia(null);
@@ -50,6 +66,11 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
             </Typography>
         </Box>
         <br/>
+        {message !== null && <Alert style={{marginBottom: 5}} severity={message.type} onClose={(e) => {
+            setMessage(null);
+        }}>
+            {message.text}
+        </Alert>}
         <Box>
             <b>Autor: </b>
             {incidencia.usuario.nombre + " " + incidencia.usuario.apellido}
@@ -61,7 +82,7 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         <Box>
             <FormControl variant={"standard"} sx={{m: 1, minWidth: "20em"}}>
                 <InputLabel>Asignar ingeniero de servicio</InputLabel>
-                <Select label={"Ingeniero de servicio"} value={idIngeniero} onChange={(e) => {
+                <Select color="success" label={"Ingeniero de servicio"} value={idIngeniero} onChange={(e) => {
                     setIdIngeniero(e.target.value);
                 }}>
                     <MenuItem value={0}>

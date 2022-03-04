@@ -22,7 +22,6 @@ const Usuarios = () => {
 
     React.useEffect(() => {
         usuarioServicio.obtenTodos().then(({data}) => {
-            console.log("usuarios", data)
             if (typeof data !== "undefined" && data !== null && data.length > 0) {
                 setUsuarios(data);
             } else {
@@ -44,7 +43,6 @@ const Usuarios = () => {
 
     const agregaUsuario = (nuevo) => {
         let usuarios_ = [...usuarios, nuevo];
-        console.log("nuevo usuario", usuarios_)
         setUsuarios(usuarios_);
     }
     const editaUsuario = (u) => {

@@ -1,3 +1,8 @@
-body {
+bwidthody {
  /* background: linear-gradient(to top, rgb(130,190,181), white);*/
+
+}
+
+.MuiButton-root {
+    border-radius: 8px !important;
 }

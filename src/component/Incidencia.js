@@ -52,7 +52,7 @@ const Incidencia = () => {
             <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
         </Grid>
         <Grid item xs={6}>
-            {user.idRol !== 1 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
+            {user.idRol === 3 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
             {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 &&
             <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={asignaIncidencia}/>}
             {selectedIncidencia !== null && (user.idRol !== 1 || selectedIncidencia.estado !== 0) &&
