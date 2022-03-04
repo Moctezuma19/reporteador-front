@@ -3,11 +3,8 @@ import UsuarioServicio from "../services/UsuarioServicio";
 import {
     Alert,
     Box,
-    CircularProgress,
-    Tabs,
-    Tab, Paper, Grid
+    CircularProgress, Grid
 } from "@mui/material";
-import {Delete, PeopleAlt, Settings} from "@mui/icons-material";
 import ListaUsuarios from "./ListaUsuarios";
 import FormUsuario from "./FormUsuario";
 import EditaUsuario from "./EditaUsuario";

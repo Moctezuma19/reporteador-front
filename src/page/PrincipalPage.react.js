@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
     Grid,
-    Box,
     AppBar,
-    Container, Toolbar, Typography, Button
+    Container, Button
 } from "@mui/material";
 import "../css/Principal.css";
 import Usuarios from "../component/Usuarios";

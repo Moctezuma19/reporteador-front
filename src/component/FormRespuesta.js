@@ -5,8 +5,7 @@ import {
     Checkbox,
     FormControlLabel, Modal,
     Paper,
-    TextareaAutosize,
-    TextField
+    TextareaAutosize
 } from "@mui/material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";

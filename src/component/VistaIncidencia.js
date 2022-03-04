@@ -1,10 +1,9 @@
-import {Box, Paper, Stack} from "@mui/material";
+import {Stack} from "@mui/material";
 import React from "react";
 import DescripcionIncidencia from "./DescripcionIncidencia";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";
 import FormRespuesta from "./FormRespuesta";
-import {fecha} from "../util/Util";
 
 const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     const {user} = useAuthContext();
