@@ -21,6 +21,10 @@ class IncidenciaServicio {
     responde(data) {
         return http.put(baseUrl + `/incidencia/responde`, data);
     }
+
+    obtenDescripcion(idIncidencia) {
+        return http.get(baseUrl + `/incidencia/descripcion/${idIncidencia}`);
+    }
 }
 
 export default IncidenciaServicio;

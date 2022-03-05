@@ -10,7 +10,7 @@ import {
     TablePagination,
     TableRow, Tooltip
 } from "@mui/material";
-import {Delete, Edit, EditOff} from "@mui/icons-material";
+import {Delete, Edit} from "@mui/icons-material";
 import React from "react";
 import UsuarioServicio from "../services/UsuarioServicio";
 

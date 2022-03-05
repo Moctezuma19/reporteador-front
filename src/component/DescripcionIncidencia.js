@@ -1,11 +1,14 @@
 import React from 'react';
-import {Box, Divider, IconButton, Paper, Typography} from "@mui/material";
-import {Close} from "@mui/icons-material";
+import {Box, Divider, IconButton, Paper, Tooltip, Typography} from "@mui/material";
+import {Close, NewReleases} from "@mui/icons-material";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {fecha} from "../util/Util";
+import IncidenciaServicio from "../services/IncidenciaServicio";
 
 const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
     const {user} = useAuthContext();
+    const [descripcion, setDescripcion] = React.useState("");
+    const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
 
     const getNombre = (idUsuario) => {
         if (incidencia.usuario.idUsuario === idUsuario) {
@@ -13,6 +16,16 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         }
         return incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.nombre;
     }
+
+    React.useEffect(() => {
+        incidenciaServicio.obtenDescripcion(incidencia.idIncidencia).then(({data}) => {
+            if (typeof data !== "undefined" && data !== null) {
+                setDescripcion(data);
+            }
+        }).catch((error) => {
+            console.log("error: " + error);
+        });
+    }, [incidencia]);
 
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
@@ -44,7 +57,7 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
             }
             {user.idRol !== 2 && <div>
                 <b>Ingeniero de servicio: </b>
-                {incidencia.asignacion !== null ? incidencia.asignacion?.usuario?.nombre + " " + incidencia.asignacion?.usuario?.apellido: "Sin asignar"}
+                {incidencia.asignacion !== null ? incidencia.asignacion?.usuario?.nombre + " " + incidencia.asignacion?.usuario?.apellido : "Sin asignar"}
             </div>
             }
 
@@ -55,12 +68,14 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
                 incidencia.estado === 1 ? <span className="proceso-estado">en proceso</span> :
                     incidencia.estado === 2 ? <span className="cerrado-estado">cerrado</span> :
                         incidencia.estado === 3 ? <span className="advertencia-estado">pendiente por el usuario</span> :
-                            <span className="advertencia-estado">pendiente por el proveedor</span>
+                            incidencia.estado === 4 ?
+                                <span className="advertencia-estado">Pendiente por el proveedor</span> :
+                                <span className="advertencia-estado">Pendiente</span>
             }
         </Box>
         <Box>
             <b>Descripción: </b>
-            {incidencia?.descripcion}
+            {descripcion}
         </Box>
         {respuestas?.length > 0 && respuestas?.map((r, k) =>
             (<React.Fragment key={`r-${k}`}>

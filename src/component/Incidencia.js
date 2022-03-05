@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid} from "@mui/material";
+import {Alert, Grid} from "@mui/material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";
 import FormIncidencia from "./FormIncidencia";
@@ -48,6 +48,9 @@ const Incidencia = () => {
 
     return (<Grid container spacing={2}>
         <Grid item xs={12}>
+            { incidencias.length === 0 && <Alert severity="warning">
+                No hay incidencias
+            </Alert>}
             {incidencias.length > 0 &&
             <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
         </Grid>

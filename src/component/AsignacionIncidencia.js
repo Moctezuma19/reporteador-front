@@ -20,8 +20,9 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     const [ingenieros, setIngenieros] = React.useState([]);
     const [idIngeniero, setIdIngeniero] = React.useState(0);
     const [message, setMessage] = React.useState(null);
-    const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
+    const [descripcion, setDescripcion] = React.useState("");
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
+    const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
 
     const handleSubmit = () => {
         if (idIngeniero === 0) {
@@ -52,6 +53,16 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         });
     }, []);
 
+    React.useEffect(() => {
+        incidenciaServicio.obtenDescripcion(incidencia.idIncidencia).then(({data}) => {
+            if (typeof data !== "undefined" && data !== null) {
+                setDescripcion(data);
+            }
+        }).catch((error) => {
+            console.log("error: " + error);
+        });
+    }, [incidencia]);
+
 
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
@@ -77,7 +88,7 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         </Box>
         <Box>
             <b>Descripción: </b>
-            {incidencia.descripcion}
+            {descripcion}
         </Box>
         <Box>
             <FormControl variant={"standard"} sx={{m: 1, minWidth: "20em"}}>

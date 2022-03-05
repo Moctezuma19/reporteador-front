@@ -5,4 +5,5 @@ bwidthody {
 
 .MuiButton-root {
     border-radius: 8px !important;
+    outline: none !important;
 }
