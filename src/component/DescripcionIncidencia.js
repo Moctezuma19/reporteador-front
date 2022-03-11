@@ -1,10 +1,9 @@
 import React from 'react';
-import {Box, Button, Divider, IconButton, Modal, Paper, Tooltip, Typography} from "@mui/material";
-import {Close, Delete, Download, NewReleases} from "@mui/icons-material";
+import {Box, Button, Divider, IconButton, Modal, Paper, Typography} from "@mui/material";
+import {Close, Download} from "@mui/icons-material";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {fecha} from "../util/Util";
 import IncidenciaServicio from "../services/IncidenciaServicio";
-import {baseUrl} from "../util/Constants";
 import ImagenServicio from "../services/ImagenServicio";
 
 const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
