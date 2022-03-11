@@ -85,18 +85,18 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         </TableCell>}
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.estado === 0 ?
-                                <div><span className="exito-estado">Abierto</span> <Tooltip
+                                <div><span className="exito-estado">abierta</span> <Tooltip
                                     title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
                                     color={"error"}/></Tooltip></div> :
                                 incidencia.estado === 1 ?
                                     <span className="proceso-estado">en proceso</span> :
                                     incidencia.estado === 2 ?
-                                        <span className="cerrado-estado">cerrado</span> :
+                                        <span className="cerrado-estado">cerrada</span> :
                                         incidencia.estado === 3 ?
-                                            <span className="advertencia-estado">Pendiente por el usuario</span> :
+                                            <span className="advertencia-estado">pendiente por el usuario</span> :
                                             incidencia.estado === 4 ?
-                                                <span className="advertencia-estado">Pendiente por el proveedor</span> :
-                                                <div><span className="advertencia-estado">Pendiente</span> <Tooltip
+                                                <span className="advertencia-estado">pendiente por el proveedor</span> :
+                                                <div><span className="advertencia-estado">pendiente</span> <Tooltip
                                                     title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
                                                     color={"error"}/></Tooltip></div>
                             }

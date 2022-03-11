@@ -13,6 +13,7 @@ import {useAuthContext} from "../context/AuthenticationContext";
 const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
 
     const {user} = useAuthContext();
+
     const formRespuesta_ = {
         descripcion: '',
         cierre: false
@@ -39,7 +40,6 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
         }
 
         let obj = {...formRespuesta, idUsuario: user.idUsuario, idIncidencia: idIncidencia};
-        console.log("respondiendo", obj)
         incidenciaServicio.responde(obj).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
                 agregaRespuesta(data, false);
@@ -69,7 +69,7 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 800,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -89,11 +89,11 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
                     borderRadius: 8
                 }}/>
             </Box>
-            <Box>
+            {user.idRol !== 3 && <Box>
                 <FormControlLabel control={<Checkbox checked={formRespuesta.cierre} onChange={(e) => {
                     handleChangeChecked();
                 }}/>} label="¿Cerrar?"/>
-            </Box>
+            </Box>}
             <Box style={{marginTop: 10, float: "right"}}>
                 <Button type={"submit"} variant={"contained"}
                         color={"success"}> Enviar </Button>
@@ -117,7 +117,7 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
                     <Button variant={"contained"} color={"success"} type={"button"}
                             onClick={(e) => {
                                 handleCierra();
-                            }}> Cerrar </Button> <span> </span>
+                            }}> Cerrar </Button>
                     <Button variant={"contained"} color={"success"} type={"button"}
                             onClick={(e) => {
                                 setShowModal(false);
