@@ -6,14 +6,15 @@ import {
     FormControl,
     IconButton,
     InputLabel,
-    MenuItem,
+    MenuItem, Modal,
     Paper,
     Select,
     Typography
 } from "@mui/material";
 import UsuarioServicio from "../services/UsuarioServicio";
 import IncidenciaServicio from "../services/IncidenciaServicio";
-import {Close} from "@mui/icons-material";
+import {Close, Download} from "@mui/icons-material";
+import ImagenServicio from "../services/ImagenServicio";
 
 const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
 
@@ -21,8 +22,23 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     const [idIngeniero, setIdIngeniero] = React.useState(0);
     const [message, setMessage] = React.useState(null);
     const [descripcion, setDescripcion] = React.useState("");
+    const [imagen1, setImagen1] = React.useState(null);
+    const [imagen2, setImagen2] = React.useState(null);
+    const [selectedImage, setSelectedImage] = React.useState(0);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
+    const imagenServicio = React.useMemo(() => new ImagenServicio(), []);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        bgcolor: 'background.paper',
+        width: 1000,
+        boxShadow: 24,
+        p: 4,
+    };
 
     const handleSubmit = () => {
         if (idIngeniero === 0) {
@@ -61,6 +77,25 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         }).catch((error) => {
             console.log("error: " + error);
         });
+
+        if (incidencia.imagen1 !== null) {
+            imagenServicio.obtenImagen(incidencia.imagen1).then(({data}) => {
+                if (typeof data !== "undefined" && data !== null) {
+                    setImagen1(data);
+                }
+            }).catch((error) => {
+                console.log("error: " + error);
+            });
+        }
+        if (incidencia.imagen2 !== null) {
+            imagenServicio.obtenImagen(incidencia.imagen2).then(({data}) => {
+                if (typeof data !== "undefined" && data !== null) {
+                    setImagen2(data);
+                }
+            }).catch((error) => {
+                console.log("error: " + error);
+            });
+        }
     }, [incidencia]);
 
 
@@ -88,7 +123,27 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         </Box>
         <Box>
             <b>Descripción: </b>
-            {descripcion}
+            <p>{descripcion}</p>
+        </Box>
+        <Box>
+            <div style={{display: "flex"}}>
+                {imagen1 !== null &&
+                <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
+                     src={`data:image/jpeg;base64, ${imagen1}`}
+                     onClick={(e) => {
+                         setSelectedImage(1);
+                     }}
+                />}
+
+                {imagen2 !== null &&
+                <img alt="imagen-incidencia" className="blur-imagen"
+                     style={{marginLeft: 10, marginTop: 10, cursor: "pointer"}}
+                     src={`data:image/jpeg;base64, ${imagen2}`}
+                     onClick={(e) => {
+                         setSelectedImage(2);
+                     }}
+                />}
+            </div>
         </Box>
         <Box>
             <FormControl variant={"standard"} sx={{m: 1, minWidth: "20em"}}>
@@ -112,6 +167,34 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
                 handleSubmit();
             }}> Asignar </Button>
         </Box>
+        {selectedImage !== 0 && <Modal
+            open={selectedImage !== 0}
+            onClose={(e) => {
+                setSelectedImage(0);
+            }}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <div style={style}>
+                <img alt="imagen3" style={{width: "200%", height: "200%"}}
+                     src={`data:image/data;base64, ${selectedImage === 1 ? imagen1 : imagen2}`}/>
+                <Button type="button" variant="contained" color="success"
+                        style={{textTransform: "capitalize", marginTop: 10}} onClick={(e) => {
+
+                    const link = document.createElement('a');
+                    link.href = `data:image/data;base64, ${selectedImage === 1 ? imagen1 : imagen2}`;
+                    link.setAttribute(
+                        'download',
+                        `imagen-incidencia-${incidencia.idIncidencia}-${selectedImage}.jpg`,
+                    );
+                    document.body.appendChild(link);
+                    link.click();
+                    link.parentNode.removeChild(link);
+                }}>Descargar <Download/></Button>
+
+            </div>
+
+        </Modal>}
     </Paper>);
 };
 

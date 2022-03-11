@@ -37,13 +37,12 @@ const Incidencia = () => {
         setSelectedIncidencia(null);
     }
 
-    const editaIncidencia = () => {
-        let inc = {...selectedIncidencia, estado: 2};
+    const editaIncidencia = (nIncidencia) => {
+        let inc = {...nIncidencia};
         let idx = incidencias.findIndex(i => i.idIncidencia === inc.idIncidencia);
         let incs = [...incidencias];
         incs[idx] = {...inc};
         setIncidencias(incs);
-        setSelectedIncidencia(null);
     }
 
     return (<Grid container spacing={2}>

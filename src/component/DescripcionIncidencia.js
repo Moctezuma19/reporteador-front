@@ -22,6 +22,28 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         return incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.nombre;
     }
 
+    const getCambio = (desc) => {
+        let edo = parseInt(desc.substring(desc.indexOf("#S:") + 3));
+        let desc_ = desc.substring(0, desc.indexOf("#S:"));
+        let texto = "Cambió el estado de la incidencia a ";
+        switch (edo) {
+            case 1:
+                return (<div>{texto}<span className="proceso-estado">en proceso</span>. <p>{desc_}</p></div>);
+            case 2:
+                return (<div>{texto}<span className="cerrado-estado">cerrada</span>. <p>{desc_}</p></div>);
+            case 3:
+                return (
+                    <div>{texto}<span className="advertencia-estado">pendiente por el usuario</span>. <p>{desc_}</p>
+                    </div>);
+            case 4:
+                return (
+                    <div>{texto}<span className="advertencia-estado">pendiente por el proveedor</span>. <p>{desc_}</p>
+                    </div>);
+            default:
+                return null;
+        }
+    }
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -109,9 +131,9 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         </Box>
         <Box>
             <b>Descripción: </b>
-            {descripcion}
+            <p>{descripcion}</p>
         </Box>
-        <Box>
+        <Box style={{marginBottom: 10}}>
             <div style={{display: "flex"}}>
                 {imagen1 !== null &&
                 <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
@@ -133,16 +155,16 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         </Box>
         {respuestas?.length > 0 && respuestas?.map((r, k) =>
             (<React.Fragment key={`r-${k}`}>
+                <Divider/>
                 <Box style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
                     <Box>
                         <b> {r.idUsuario === user.idUsuario ? "Tú" : getNombre(r.idUsuario)}</b>
                         <p style={{color: "rgb(113, 118, 117)"}}>{fecha(r.actualizacion)}</p>
                     </Box>
                     <Box>
-                        {r.descripcion}
+                        {r.descripcion.indexOf("#S:") !== -1 ? getCambio(r.descripcion) : r.descripcion}
                     </Box>
                 </Box>
-                {k !== respuestas.length - 1 && <Divider/>}
             </React.Fragment>))}
 
         {selectedImage !== 0 && <Modal

@@ -1,22 +1,22 @@
 import React from 'react';
 import {
+    Alert,
     Box,
-    Button,
-    Checkbox,
-    FormControlLabel, Modal,
-    Paper,
+    Button, FormControl, InputLabel, MenuItem, Modal,
+    Paper, Select,
     TextareaAutosize
 } from "@mui/material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";
 
-const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
+const FormRespuesta = ({idIncidencia, agregaRespuesta, estado}) => {
 
     const {user} = useAuthContext();
 
+    const [message, setMessage] = React.useState(null);
     const formRespuesta_ = {
         descripcion: '',
-        cierre: false
+        estado: 0
     }
     const [formRespuesta, setFormRespuesta] = React.useState({...formRespuesta_});
     const [showModal, setShowModal] = React.useState(false);
@@ -25,24 +25,30 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
     const handleChangeDescripcion = (e) => {
         setFormRespuesta({...formRespuesta, descripcion: e.target.value});
     }
-    const handleChangeChecked = () => {
-        setFormRespuesta({...formRespuesta, cierre: !formRespuesta.cierre});
+    const handleChangeEstado = (e) => {
+        setFormRespuesta({...formRespuesta, estado: e.target.value});
     }
 
     const handleSubmitRespuesta = (e) => {
         e.preventDefault();
-        if (!formRespuesta.descripcion) {
+
+        if (!formRespuesta.descripcion && (estado === formRespuesta.estado || formRespuesta.estado === 0)) {
+            setMessage({text: "Debes de escribir una respuesta.", type: "warning"});
             return;
         }
-        if (formRespuesta.cierre) {
+        if (formRespuesta.estado === 2) {
             setShowModal(true);
             return;
         }
+        let ag = formRespuesta.descripcion;
+        if (formRespuesta.estado !== estado && formRespuesta.estado !== 0) {
+            ag += `#S:${formRespuesta.estado}`;
+        }
 
-        let obj = {...formRespuesta, idUsuario: user.idUsuario, idIncidencia: idIncidencia};
+        let obj = {...formRespuesta, idUsuario: user.idUsuario, idIncidencia: idIncidencia, descripcion: ag};
         incidenciaServicio.responde(obj).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                agregaRespuesta(data, false);
+                agregaRespuesta(data, formRespuesta.estado !== 0 ? formRespuesta.estado: estado);
                 setFormRespuesta({...formRespuesta_});
             }
         }).catch((error) => {
@@ -52,10 +58,14 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
     }
 
     const handleCierra = () => {
-        let obj = {...formRespuesta, idUsuario: user.idUsuario, idIncidencia: idIncidencia};
+        let ag = formRespuesta.descripcion;
+        if (formRespuesta.estado !== estado) {
+            ag += `#S:${formRespuesta.estado}`;
+        }
+        let obj = {...formRespuesta, idUsuario: user.idUsuario, idIncidencia: idIncidencia, descripcion: ag};
         incidenciaServicio.responde(obj).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                agregaRespuesta(data, true);
+                agregaRespuesta(data, 2);
                 setShowModal(false);
                 setFormRespuesta({...formRespuesta_});
             }
@@ -75,8 +85,36 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
         boxShadow: 24,
         p: 4,
     };
+
+    const estados = [
+        {nombre: "en proceso", clase: "proceso-estado"},
+        {nombre: "cerrada", clase: "cerrado-estado"},
+        {nombre: "pendiente por el usuario", clase: "advertencia-estado"},
+        {nombre: "pendiente por el proveedor", clase: "advertencia-estado"},
+    ];
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
+        {message !== null && <Alert severity={message.type} onClose={() => {
+            setMessage(null);
+        }}>{message.text}</Alert>}
         <form onSubmit={handleSubmitRespuesta}>
+            {user.idRol !== 3 && <Box style={{marginBottom: 10}}>
+                <FormControl variant={"standard"} sx={{m: 1, minWidth: "20em"}}>
+                    <InputLabel>Cambiar estado</InputLabel>
+                    <Select color="success" label={"Estado"} value={formRespuesta.estado} onChange={handleChangeEstado}>
+                        <MenuItem value={0}>
+                            --- Ninguno ---
+                        </MenuItem>
+                        {estados.length > 0 && estados.map((est, k) => {
+                            if (est.nombre === "cerrada" && user.idRol === 3) {
+                                return
+                            }
+                            return (<MenuItem value={k + 1} key={"e-" + k}>
+                                <span className={est.clase}>{est.nombre}</span>
+                            </MenuItem>);
+                        })}
+                    </Select>
+                </FormControl>
+            </Box>}
             <Box>
                 <TextareaAutosize placeholder={"Introduce la respuesta."}
                                   value={formRespuesta.descripcion}
@@ -89,11 +127,6 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
                     borderRadius: 8
                 }}/>
             </Box>
-            {user.idRol !== 3 && <Box>
-                <FormControlLabel control={<Checkbox checked={formRespuesta.cierre} onChange={(e) => {
-                    handleChangeChecked();
-                }}/>} label="¿Cerrar?"/>
-            </Box>}
             <Box style={{marginTop: 10, float: "right"}}>
                 <Button type={"submit"} variant={"contained"}
                         color={"success"}> Enviar </Button>
@@ -106,22 +139,21 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta}) => {
                 setShowModal(false);
             }}
             aria-labelledby="parent-modal-title"
-            aria-describedby="parent-modal-description"
-        >
+            aria-describedby="parent-modal-description">
             <Box sx={{...style, width: 600}}>
                 <h4 id="parent-modal-title">¿Seguro que deseas cerrar la incidencia?</h4>
                 <p id="parent-modal-description">
                     Si cierras la incidencia no podrás responder o recibir respuestas de la incidencia.
                 </p>
                 <div style={{float: "left"}}>
-                    <Button variant={"contained"} color={"success"} type={"button"}
+                    <Button style={{marginRight: 10}} variant={"contained"} color={"success"} type={"button"}
                             onClick={(e) => {
                                 handleCierra();
-                            }}> Cerrar </Button>
-                    <Button variant={"contained"} color={"success"} type={"button"}
+                            }}> Sí </Button>
+                    <Button variant={"contained"} color={"error"} type={"button"}
                             onClick={(e) => {
                                 setShowModal(false);
-                            }}> Cancelar </Button>
+                            }}> No </Button>
                 </div>
             </Box>
         </Modal>

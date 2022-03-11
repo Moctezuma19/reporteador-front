@@ -10,11 +10,10 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     const [respuestas, setRespuestas] = React.useState([]);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
 
-    const agregaRespuesta = (nuevo, cierre) => {
-        if (cierre) {
-            setIncidencia({...incidencia, estado: 2});
-            editaIncidencia();
-        }
+    const agregaRespuesta = (nuevo, estado) => {
+        let nIncidencia = {...incidencia, estado: estado};
+        setIncidencia(nIncidencia);
+        editaIncidencia(nIncidencia);
         setRespuestas([...respuestas, nuevo]);
     }
 
@@ -31,7 +30,8 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     return (<Stack spacing={2}>
         <DescripcionIncidencia incidencia={incidencia} setIncidencia={setIncidencia} respuestas={respuestas}/>
         {incidencia.estado !== 2 && user.idRol !== 1 &&
-        <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}/>}
+        <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}
+                       estado={incidencia.estado} setIncidencia={setIncidencia}/>}
     </Stack>);
 };
 

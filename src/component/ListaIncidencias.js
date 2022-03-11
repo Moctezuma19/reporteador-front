@@ -25,10 +25,10 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
         setPage(0);
     };
 
-    const cellStyle = {
+    /*const cellStyle = {
         borderBottom: "none",
         color: "#717675"
-    }
+    }*/
 
     return (<Paper elevation={3} style={{borderRadius: 16, overflowX: "auto"}}>
         <Table size={"medium"}>
@@ -86,7 +86,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.estado === 0 ?
                                 <div><span className="exito-estado">abierta</span> <Tooltip
-                                    title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
+                                    title={user.idRol === 1 && incidencia.asignacion === null? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
                                     color={"error"}/></Tooltip></div> :
                                 incidencia.estado === 1 ?
                                     <span className="proceso-estado">en proceso</span> :
