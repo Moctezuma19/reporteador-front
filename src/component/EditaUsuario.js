@@ -45,11 +45,13 @@ const EditaUsuario = ({editaUsuario, usuario_, cierra}) => {
             if (typeof data !== "undefined" && data !== null && typeof data !== "string") {
                 setMessage({texto: "El usuario se actualizo con éxito.", type: "success"});
                 editaUsuario(data);
-                setTimeout(() => {
-                    setUsuario({...usuario_, password: "",
-                        password_repeat: "",
-                        idRol: usuario_.rol.idRol});
-                }, 2000);
+                //setTimeout(() => {
+                setUsuario({
+                    ...usuario, password: "",
+                    password_repeat: "",
+                    idRol: usuario_.rol.idRol
+                });
+                // }, 2000);
             } else {
                 setMessage({texto: "El correo ya esta registrado, intenta con otro.", type: "warning"});
             }
