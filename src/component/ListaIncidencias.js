@@ -7,7 +7,7 @@ import {
     TablePagination,
     TableRow, Tooltip
 } from "@mui/material";
-import {NewReleases, ZoomIn} from "@mui/icons-material";
+import {Download, NewReleases, ZoomIn} from "@mui/icons-material";
 import React from "react";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {fecha} from "../util/Util";
@@ -15,20 +15,17 @@ import {fecha} from "../util/Util";
 const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const {user} = useAuthContext();
     const [page, setPage] = React.useState(0);
+    const [paginaIncidencias, setPaginaIncidencias] = React.useState(incidencias.slice(0, 10));
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        setPaginaIncidencias(incidencias.slice(newPage * 10, newPage * 10 + 10));
     };
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
-    /*const cellStyle = {
-        borderBottom: "none",
-        color: "#717675"
-    }*/
 
     return (<Paper elevation={3} style={{borderRadius: 16, overflowX: "auto"}}>
         <Table size={"medium"}>
@@ -61,7 +58,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {incidencias.map((incidencia, k) => {
+                {paginaIncidencias.map((incidencia, k) => {
                     return (<TableRow key={`tr-${k}`}>
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.idIncidencia}
@@ -86,7 +83,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.estado === 0 ?
                                 <div><span className="exito-estado">abierta</span> <Tooltip
-                                    title={user.idRol === 1 && incidencia.asignacion === null? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
+                                    title={user.idRol === 1 && incidencia.asignacion === null ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
                                     color={"error"}/></Tooltip></div> :
                                 incidencia.estado === 1 ?
                                     <span className="proceso-estado">en proceso</span> :
@@ -108,6 +105,9 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                                         setSelectedIncidencia(incidencia);
                                     }}/>
                                 </Tooltip>
+                                {user.idRol === 1 && <Tooltip title={"Descargar reporte"}>
+                                    <Download className={"icon-users"}/>
+                                </Tooltip>}
 
                             </div>
                         </TableCell>

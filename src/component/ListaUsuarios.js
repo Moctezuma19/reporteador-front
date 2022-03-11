@@ -18,17 +18,23 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [paginaUsuarios, setPaginaUsuarios] = React.useState(usuarios.slice(0, 10));
     const [showModal, setShowModal] = React.useState(false);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        setPaginaUsuarios(usuarios.slice(newPage * 10, newPage * 10 + 10));
     };
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    React.useEffect(() => {
+        setPaginaUsuarios(usuarios.slice(page * 10, page * 10 + 10));
+    }, [usuarios])
 
     const handleElimina = (id) => {
         usuarioServicio.elimina(id).then(({data}) => {
@@ -78,7 +84,7 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
                 </TableRow>
             </TableHead>
             <TableBody>
-                {usuarios.map((u, k) => {
+                {paginaUsuarios.map((u, k) => {
                     return (<TableRow key={`tr-${k}`}>
                         <TableCell style={{color: "#717675"}}>
                             {u.correo}
