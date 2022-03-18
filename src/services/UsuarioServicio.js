@@ -21,6 +21,10 @@ class UsuarioServicio {
     obtenIngenieros() {
         return http.get(baseUrl + "/usuario/ingenieros");
     }
+
+    filtra(data) {
+        return http.post(baseUrl + "/usuario/filtra", data);
+    }
 }
 
 export default UsuarioServicio;

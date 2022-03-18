@@ -13,16 +13,8 @@ import FiltrosUsuarios from "./FiltrosUsuarios";
 const Usuarios = () => {
     const [usuario, setUsuario] = React.useState(null);
     const [usuarios, setUsuarios] = React.useState([]);
-    const [usuariosFiltro, setUsuariosFiltro] = React.useState([]);
     const [showLoader, setShowLoader] = React.useState(true);
     const [message, setMessage] = React.useState(null);
-    const [filtro, setFiltro] = React.useState({
-        correo: "",
-        nombre: "",
-        esIngeniero: true,
-        esUsuario: true,
-        esAdministrador: true
-    });
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
 
 
@@ -30,7 +22,6 @@ const Usuarios = () => {
         usuarioServicio.obtenTodos().then(({data}) => {
             if (typeof data !== "undefined" && data !== null && data.length > 0) {
                 setUsuarios(data);
-                setUsuariosFiltro(data);
             } else {
                 setMessage({
                     text: "No se encontraron usuarios.",
@@ -47,16 +38,6 @@ const Usuarios = () => {
             console.log("error: " + error)
         })
     }, []);
-
-    React.useEffect(() => {
-        let uf = usuarios.filter(u => u.correo.toLowerCase().includes(filtro.correo.toLowerCase()) &&
-            (`${u.nombre} ${u.apellido}`).toLowerCase().includes(filtro.nombre.toLowerCase()) &&
-            ((u.rol.idRol === 2 && filtro.esIngeniero) || (u.rol.idRol === 3 && filtro.esUsuario) ||
-                (u.rol.idRol === 1 && filtro.esAdministrador))
-        );
-
-        setUsuariosFiltro(uf);
-    }, [filtro, usuarios]);
 
     const agregaUsuario = (nuevo) => {
         let usuarios_ = [...usuarios, nuevo];
@@ -75,30 +56,35 @@ const Usuarios = () => {
     const cierraEdita = () => {
         setUsuario(null);
     }
+    React.useEffect(() => {
+        setTimeout(() => {
+            setUsuario(null);
+        }, 2000);
+    }, [usuarios])
 
 
     return (<Box>
         <Grid container spacing={2}>
             <Grid item xs={8}>
                 {showLoader &&
-                <CircularProgress color={"success"}/>
+                    <CircularProgress color={"success"}/>
                 }
                 {!showLoader && message !== null &&
-                <Alert severity={message.type} style={{marginBottom: 10}} onClose={() => {
-                    setMessage(null);
-                }}>
-                    {message.text}
-                </Alert>
+                    <Alert severity={message.type} style={{marginBottom: 10}} onClose={() => {
+                        setMessage(null);
+                    }}>
+                        {message.text}
+                    </Alert>
                 }
-                {usuariosFiltro.length > 0 ?
-                    <ListaUsuarios usuarios={usuariosFiltro} setUsuario={setUsuario} edita={usuario !== null}
+                {usuarios.length > 0 ?
+                    <ListaUsuarios usuarios={usuarios} setUsuario={setUsuario} edita={usuario !== null}
                                    setMessage={setMessage} eliminaUsuario={eliminaUsuario}/> :
                     <Alert severity={"warning"}>No se encontraron usuarios con los criterios asociados.</Alert>
                 }
             </Grid>
             <Grid item xs={4}>
                 <Stack spacing={2}>
-                    <FiltrosUsuarios filtro={filtro} setFiltros={setFiltro}/>
+                    {usuario === null && <FiltrosUsuarios setUsuarios={setUsuarios}/>}
                     {usuario !== null ?
                         <EditaUsuario editaUsuario={editaUsuario} usuario_={usuario} cierra={cierraEdita}/>
                         :
