@@ -119,7 +119,7 @@ const FormIncidencia = ({agregaIncidencia}) => {
                                           value={formIncidencia.descripcion}
                                           onChange={handleChangeDescripcion}
                                           maxLength={2048} style={{
-                            width: "50.2em",
+                            width: "41.2em",
                             height: "10em",
                             minHeight: "10em",
                             maxHeight: "10em",

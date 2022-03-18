@@ -81,10 +81,10 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                             {incidencia.asignacion !== null ? incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.apellido : "-"}
                         </TableCell>}
                         <TableCell style={{color: "#717675"}}>
-                            {incidencia.estado === 0 ?
-                                <div><span className="exito-estado">abierta</span> <Tooltip
-                                    title={user.idRol === 1 && incidencia.asignacion === null ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
-                                    color={"error"}/></Tooltip></div> :
+                            {incidencia.estado === 0  ?
+                                <div><span className="exito-estado">abierta</span> {incidencia.asignacion === null && <Tooltip
+                                    title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
+                                    color={"error"}/></Tooltip>}</div> :
                                 incidencia.estado === 1 ?
                                     <span className="proceso-estado">en proceso</span> :
                                     incidencia.estado === 2 ?

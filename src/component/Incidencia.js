@@ -29,7 +29,7 @@ const Incidencia = () => {
     }
 
     const asignaIncidencia = (usuario) => {
-        let inc = {...selectedIncidencia, asignacion : {usuario: usuario}, estado: 1};
+        let inc = {...selectedIncidencia, asignacion: {usuario: usuario}, estado: 1};
         let idx = incidencias.findIndex(i => i.idIncidencia === inc.idIncidencia);
         let incs = [...incidencias];
         incs[idx] = {...inc};
@@ -47,18 +47,20 @@ const Incidencia = () => {
 
     return (<Grid container spacing={2}>
         <Grid item xs={12}>
-            { incidencias.length === 0 && <Alert severity="warning">
+            {incidencias.length === 0 && <Alert severity="warning">
                 No hay incidencias
             </Alert>}
             {incidencias.length > 0 &&
-            <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
+                <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
         </Grid>
         <Grid item xs={6}>
             {user.idRol === 3 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
-            {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 &&
-            <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={asignaIncidencia}/>}
-            {selectedIncidencia !== null && (user.idRol !== 1 || selectedIncidencia.estado !== 0) &&
-            <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia} editaIncidencia={editaIncidencia}/>}
+            {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 && selectedIncidencia.asignacion === null &&
+                <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
+                                      editaIncidencia={asignaIncidencia}/>}
+            {selectedIncidencia !== null &&  selectedIncidencia.asignacion !== null &&
+                <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
+                                 editaIncidencia={editaIncidencia}/>}
         </Grid>
     </Grid>);
 };

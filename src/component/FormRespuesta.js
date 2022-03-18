@@ -120,7 +120,7 @@ const FormRespuesta = ({idIncidencia, agregaRespuesta, estado}) => {
                                   value={formRespuesta.descripcion}
                                   onChange={handleChangeDescripcion}
                                   maxLength={2048} style={{
-                    width: "50.4em",
+                    width: "41.4em",
                     height: "10em",
                     minHeight: "10em",
                     maxHeight: "10em",
