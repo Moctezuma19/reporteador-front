@@ -25,6 +25,10 @@ class IncidenciaServicio {
     obtenDescripcion(idIncidencia) {
         return http.get(baseUrl + `/incidencia/descripcion/${idIncidencia}`);
     }
+
+    filtra(data) {
+        return http.post(baseUrl + "/incidencia/filtra", data);
+    }
 }
 
 export default IncidenciaServicio;

@@ -6,6 +6,7 @@ import FormIncidencia from "./FormIncidencia";
 import ListaIncidencias from "./ListaIncidencias";
 import AsignacionIncidencia from "./AsignacionIncidencia";
 import VistaIncidencia from "./VistaIncidencia";
+import FiltrosIncidencia from "./FiltrosIncidencia";
 
 const Incidencia = () => {
     const {user} = useAuthContext();
@@ -46,21 +47,29 @@ const Incidencia = () => {
     }
 
     return (<Grid container spacing={2}>
-        <Grid item xs={12}>
-            {incidencias.length === 0 && <Alert severity="warning">
-                No hay incidencias
-            </Alert>}
-            {incidencias.length > 0 &&
-                <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
+        <Grid item xs={9}>
+            <Grid container>
+                <Grid item xs={12}>
+                    {incidencias.length === 0 && <Alert severity="warning">
+                        No hay incidencias
+                    </Alert>}
+                    {incidencias.length > 0 &&
+                        <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
+                </Grid>
+                <Grid item xs={12} style={{marginTop: 20}}>
+                    {user.idRol === 3 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
+                    {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 && selectedIncidencia.asignacion === null &&
+                        <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
+                                              editaIncidencia={asignaIncidencia}/>}
+                    {selectedIncidencia !== null &&  selectedIncidencia.asignacion !== null &&
+                        <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
+                                         editaIncidencia={editaIncidencia}/>}
+                </Grid>
+            </Grid>
+
         </Grid>
-        <Grid item xs={6}>
-            {user.idRol === 3 && selectedIncidencia === null && <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
-            {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.estado === 0 && selectedIncidencia.asignacion === null &&
-                <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
-                                      editaIncidencia={asignaIncidencia}/>}
-            {selectedIncidencia !== null &&  selectedIncidencia.asignacion !== null &&
-                <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
-                                 editaIncidencia={editaIncidencia}/>}
+        <Grid item xs={3}>
+            <FiltrosIncidencia setIncidencias={setIncidencias}/>
         </Grid>
     </Grid>);
 };

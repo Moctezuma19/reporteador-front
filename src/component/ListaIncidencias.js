@@ -65,7 +65,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         </TableCell>
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.titulo.length > 15 ?
-                                (<Tooltip title={incidencia.titulo}><span>{incidencia.titulo.substr(0, 15) +
+                                (<Tooltip title={incidencia.titulo}><span>{incidencia.titulo.substring(0, 15) +
                                 "..."}</span></Tooltip>) : <span>{incidencia.titulo}</span>}
                         </TableCell>
                         {user.idRol !== 3 && <TableCell style={{color: "#717675"}}>

@@ -137,3 +137,8 @@
     height: 8em;
 }
 
+.filtro-incidencias div {
+    margin-top: 10px;
+    margin-left: 0;
+}
+
