@@ -24,6 +24,7 @@ const ListaUsuarios = ({usuarios, setUsuario, edita, eliminaUsuario, setMessage}
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        setUsuario(null);
         setPaginaUsuarios(usuarios.slice(newPage * 10, newPage * 10 + 10));
     };
 

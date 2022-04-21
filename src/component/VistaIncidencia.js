@@ -19,7 +19,7 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
 
 
     React.useEffect(() => {
-        incidenciaServicio.obtenRespuestas(incidencia.idIncidencia).then(({data}) => {
+        incidenciaServicio.obtenRespuestas(incidencia?.idIncidencia).then(({data}) => {
             if (typeof data !== "undefined" && typeof data !== "string" && data !== null) {
                 setRespuestas(data);
             }
@@ -28,8 +28,8 @@ const VistaIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         });
     }, [incidencia]);
     return (<Stack spacing={2}>
-        <DescripcionIncidencia incidencia={incidencia} setIncidencia={setIncidencia} respuestas={respuestas}/>
-        {incidencia.estado !== 2 && user.idRol !== 1 &&
+        {incidencia !== null && <DescripcionIncidencia incidencia={incidencia} setIncidencia={setIncidencia} respuestas={respuestas}/>}
+        {incidencia !== null && incidencia.estado !== 2 && user.idRol !== 1 &&
         <FormRespuesta idIncidencia={incidencia.idIncidencia} agregaRespuesta={agregaRespuesta}
                        estado={incidencia.estado} setIncidencia={setIncidencia}/>}
     </Stack>);

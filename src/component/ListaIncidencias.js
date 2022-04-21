@@ -19,6 +19,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        setSelectedIncidencia(null);
         setPaginaIncidencias(incidencias.slice(newPage * 10, newPage * 10 + 10));
     };
 
@@ -26,6 +27,10 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    React.useEffect(() => {
+        setPaginaIncidencias(incidencias.slice(page * 10, page * 10 + 10));
+    }, [incidencias])
 
     return (<Paper elevation={3} style={{borderRadius: 16, overflowX: "auto"}}>
         <Table size={"medium"}>
@@ -66,7 +71,7 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                         <TableCell style={{color: "#717675"}}>
                             {incidencia.titulo.length > 15 ?
                                 (<Tooltip title={incidencia.titulo}><span>{incidencia.titulo.substring(0, 15) +
-                                "..."}</span></Tooltip>) : <span>{incidencia.titulo}</span>}
+                                    "..."}</span></Tooltip>) : <span>{incidencia.titulo}</span>}
                         </TableCell>
                         {user.idRol !== 3 && <TableCell style={{color: "#717675"}}>
                             {incidencia.usuario !== null ? `${incidencia.usuario.nombre} ${incidencia.usuario.apellido}` : "-"}
@@ -81,10 +86,11 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                             {incidencia.asignacion !== null ? incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.apellido : "-"}
                         </TableCell>}
                         <TableCell style={{color: "#717675"}}>
-                            {incidencia.estado === 0  ?
-                                <div><span className="exito-estado">abierta</span> {incidencia.asignacion === null && <Tooltip
-                                    title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
-                                    color={"error"}/></Tooltip>}</div> :
+                            {incidencia.estado === 0 ?
+                                <div><span className="exito-estado">abierta</span> {incidencia.asignacion === null &&
+                                    <Tooltip
+                                        title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
+                                        color={"error"}/></Tooltip>}</div> :
                                 incidencia.estado === 1 ?
                                     <span className="proceso-estado">en proceso</span> :
                                     incidencia.estado === 2 ?

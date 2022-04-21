@@ -1,17 +1,19 @@
 import React from 'react';
-import {Box, Button, Divider, IconButton, Modal, Paper, Typography} from "@mui/material";
-import {Close, Download} from "@mui/icons-material";
+import {Box, Button, Divider, IconButton, Modal, Paper, Tooltip, Typography} from "@mui/material";
+import {Close, Download, ZoomIn} from "@mui/icons-material";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {fecha} from "../util/Util";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import ImagenServicio from "../services/ImagenServicio";
+import {useNavigate} from "react-router-dom";
 
-const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
+const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas, cerrable = true}) => {
     const {user} = useAuthContext();
     const [descripcion, setDescripcion] = React.useState("");
     const [imagen1, setImagen1] = React.useState(null);
     const [imagen2, setImagen2] = React.useState(null);
     const [selectedImage, setSelectedImage] = React.useState(0);
+    const navigate = useNavigate();
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
     const imagenServicio = React.useMemo(() => new ImagenServicio(), []);
 
@@ -85,13 +87,18 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
 
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
-            <IconButton style={{float: "right"}} onClick={(e) => {
+            {cerrable && <IconButton style={{float: "right"}} onClick={(e) => {
                 setIncidencia(null);
             }}>
                 <Close/>
-            </IconButton>
+            </IconButton>}
             <Typography variant={"h6"}>
-                {incidencia.titulo}
+                {incidencia.titulo} {cerrable && <Tooltip title={"Ver individualmente"}><IconButton onClick={(e) => {
+                navigate(`/principal?id=${incidencia.idIncidencia}`)
+                window.location.reload();
+            }}>
+                <ZoomIn/>
+            </IconButton></Tooltip>}
             </Typography>
         </Box>
         <br/>
@@ -136,21 +143,21 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas}) => {
         <Box style={{marginBottom: 10}}>
             <div style={{display: "flex"}}>
                 {imagen1 !== null &&
-                <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
-                     src={`data:image/jpeg;base64, ${imagen1}`}
-                     onClick={(e) => {
-                         setSelectedImage(1);
-                     }}
-                />}
+                    <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
+                         src={`data:image/jpeg;base64, ${imagen1}`}
+                         onClick={(e) => {
+                             setSelectedImage(1);
+                         }}
+                    />}
 
                 {imagen2 !== null &&
-                <img alt="imagen-incidencia" className="blur-imagen"
-                     style={{marginLeft: 10, marginTop: 10, cursor: "pointer"}}
-                     src={`data:image/jpeg;base64, ${imagen2}`}
-                     onClick={(e) => {
-                         setSelectedImage(2);
-                     }}
-                />}
+                    <img alt="imagen-incidencia" className="blur-imagen"
+                         style={{marginLeft: 10, marginTop: 10, cursor: "pointer"}}
+                         src={`data:image/jpeg;base64, ${imagen2}`}
+                         onClick={(e) => {
+                             setSelectedImage(2);
+                         }}
+                    />}
             </div>
         </Box>
         {respuestas?.length > 0 && respuestas?.map((r, k) =>

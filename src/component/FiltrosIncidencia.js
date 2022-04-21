@@ -12,13 +12,19 @@ import {Search} from "@mui/icons-material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
+import {useAuthContext} from "../context/AuthenticationContext";
 
-const FiltrosIncidencia = ({setIncidencias}) => {
-    const [filtro, setFiltro] = React.useState({
+const FiltrosIncidencia = ({setIncidencias, setIncidencia}) => {
+    const {user} = useAuthContext();
+
+    const filtro_ = {
+        idIncidencia: 0,
         titulo: "",
         creacionInicio: new Date(),
         creacionFinal: new Date(),
-    });
+    }
+
+    const [filtro, setFiltro] = React.useState(filtro_);
     const [selectedEstados, setSelectedEstados] = React.useState([]);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
 
@@ -43,6 +49,19 @@ const FiltrosIncidencia = ({setIncidencias}) => {
     const handleChangeTitulo = (e) => {
         setFiltro({...filtro, titulo: e.target.value});
     }
+    const handleChangeIdIncidencia = (e) => {
+        setFiltro({...filtro, idIncidencia: e.target.value});
+    }
+
+    const handleRestaurar = (e) => {
+        incidenciaServicio.obtenTodas(user.idUsuario).then(({data}) => {
+            setIncidencia(null);
+            setFiltro(filtro_);
+            setIncidencias(data);
+        }).catch((error) => {
+           console.log("error: " + error);
+        });
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -57,7 +76,8 @@ const FiltrosIncidencia = ({setIncidencias}) => {
         let obj = {
             titulo: filtro.titulo,
             creacionInicio: d1.getTime(),
-            creacionFinal: d2.getTime()
+            creacionFinal: d2.getTime(),
+            idIncidencia: filtro.idIncidencia
         };
         obj.estados = [...selectedEstados];
         if (obj.estados.length === 0) {
@@ -65,7 +85,7 @@ const FiltrosIncidencia = ({setIncidencias}) => {
         }
 
         incidenciaServicio.filtra(obj).then(({data}) => {
-            console.log("data", data);
+            setIncidencia(null);
             setIncidencias(data);
         }).catch((error) => {
             console.log("error: " + error);
@@ -111,6 +131,17 @@ const FiltrosIncidencia = ({setIncidencias}) => {
     return (<Paper elevation={3} style={{borderRadius: 16}}>
         <Box style={{textAlign: "left", padding: 33}}>
             <form className="filtro-incidencias" onSubmit={handleSubmit}>
+                <FormControl fullWidth sx={{m: 1}} variant="standard">
+                    <InputLabel htmlFor="standard-adornment-amount">Id de incidencia</InputLabel>
+                    <Input
+                        type={"number"}
+                        min={0}
+                        id="standard-adornment-amount"
+                        value={filtro.idIncidencia}
+                        onChange={handleChangeIdIncidencia}
+                        endAdornment={<InputAdornment position={"end"}><Search/></InputAdornment>}
+                    />
+                </FormControl>
                 <FormControl fullWidth sx={{m: 1}} variant="standard">
                     <InputLabel htmlFor="standard-adornment-amount">Título</InputLabel>
                     <Input
@@ -162,6 +193,9 @@ const FiltrosIncidencia = ({setIncidencias}) => {
                 <DatePickerFinal/>
                 <FormControl fullWidth sx={{m: 1}} variant="standard">
                     <Button variant="contained" type="submit" color="success"> Filtrar </Button>
+                </FormControl>
+                <FormControl fullWidth sx={{m: 1}} variant="standard">
+                    <Button variant="contained" type="button" color="success" onClick={handleRestaurar}> Restaurar </Button>
                 </FormControl>
             </form>
         </Box>

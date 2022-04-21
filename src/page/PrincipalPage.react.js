@@ -8,8 +8,9 @@ import "../css/Principal.css";
 import Usuarios from "../component/Usuarios";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate} from "react-router-dom";
-import Incidencia from "../component/Incidencia";
+import Incidencias from "../component/Incidencias";
 import {Ballot, Group, Logout} from "@mui/icons-material";
+import Incidencia from "../component/Incidencia";
 
 const PrincipalPage = () => {
 
@@ -17,6 +18,7 @@ const PrincipalPage = () => {
     const navigate = useNavigate();
 
     const [seleccionado, setSeleccionado] = React.useState(1);
+    const [idIncidencia, setIdIncidencia] = React.useState(0);
 
     const selectedStyle = {
         backgroundColor: "white",
@@ -24,6 +26,15 @@ const PrincipalPage = () => {
         boxShadow: "rgba(145, 158, 171, 0.16) -2px 4px 6px 0px",
         fontWeight: "bold"
     }
+
+    React.useEffect(() => {
+        let url = new URL(window.location.href);
+        let id = url.searchParams.get("id");
+        if (typeof id !== "undefined" && id !== null) {
+            setIdIncidencia(parseInt(id));
+            setSeleccionado(3);
+        }
+    }, []);
     return (
         <div>
             <AppBar style={{backgroundColor: "white", boxShadow: "rgba(145, 158, 171, 0.16) 0px 8px 16px 0px"}}>
@@ -37,12 +48,12 @@ const PrincipalPage = () => {
                                 Incidencias
                             </Button>
                             {user.idRol === 1 &&
-                            <Button color={"inherit"} onClick={(e) => {
-                                setSeleccionado(2);
-                            }} startIcon={<Group/>}
-                                    style={seleccionado === 2 ? {...selectedStyle} : {}}>
-                                Usuarios
-                            </Button>}
+                                <Button color={"inherit"} onClick={(e) => {
+                                    setSeleccionado(2);
+                                }} startIcon={<Group/>}
+                                        style={seleccionado === 2 ? {...selectedStyle} : {}}>
+                                    Usuarios
+                                </Button>}
                             {/*<Button color={"inherit"} onClick={(e) => {
                                 setSeleccionado((3))
                             }}>
@@ -63,8 +74,9 @@ const PrincipalPage = () => {
 
                 </Grid>
                 <Grid item xs={10} style={{textAlign: "center"}}>
-                    {seleccionado === 1 && <Incidencia/>}
+                    {seleccionado === 1 && <Incidencias/>}
                     {seleccionado === 2 && <Usuarios/>}
+                    {seleccionado === 3 && <Incidencia idIncidencia={idIncidencia}/>}
                 </Grid>
                 <Grid item xs={1}>
                 </Grid>

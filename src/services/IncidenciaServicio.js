@@ -6,6 +6,10 @@ class IncidenciaServicio {
         return http.put(baseUrl + "/incidencia/crea", data);
     }
 
+    obten(idIncidencia) {
+        return http.get(baseUrl + `/incidencia/${idIncidencia}`);
+    }
+
     obtenTodas(idUsuario) {
         return http.get(baseUrl + `/incidencia/todas/${idUsuario}`);
     }
