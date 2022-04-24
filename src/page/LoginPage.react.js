@@ -40,7 +40,7 @@ const LoginPage = () => {
             if (data === null) {
                 setMessage({texto: "El usuario o contraseña son incorrectos.", type: "warning"})
             } else {
-                navigate("/principal")
+                navigate("/r/incidencias");
             }
         } catch (error) {
             setMessage({texto: "Error interno del servidor", type: "error"})

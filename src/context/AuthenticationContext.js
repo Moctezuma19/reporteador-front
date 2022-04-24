@@ -10,6 +10,7 @@ const initialState = {
     token: token_,
     loading: false,
     errorMessage: null,
+    seleccionada: 1,
 }
 
 
@@ -18,6 +19,7 @@ const AuthContext = React.createContext({
     dispatch: (props) => {
     }, logout: () => {
     }, loginUser: (loginPayload) => {
+    }, setSeleccionada: (opcionSeleccionada) => {
     }
 });
 
@@ -46,6 +48,17 @@ const AuthReducer = (state, action) => {
                 errorMessage: null,
                 token: ""
             };
+        case "SET_SELECTED":
+            return {
+                ...state,
+                ...action.payload
+            }
+        case "ERROR_SELECTED":
+            return {
+                ...state,
+                selected: 1,
+                errorMessage: action.error
+            }
         default:
             throw new Error("Accion no soportada: " + action.type);
 
@@ -61,7 +74,7 @@ export const useAuthContext = () => {
 const AuthProvider = ({children}) => {
 
     const [context, dispatch] = React.useReducer(AuthReducer, initialState);
-    const {user} = context;
+    const {user, seleccionada} = context;
     const loginUser = async (loginPayload) => {
         try {
             dispatch({error: null, payload: null, type: 'REQUEST_LOGIN'});
@@ -90,8 +103,17 @@ const AuthProvider = ({children}) => {
         dispatch({error: null, payload: null, type: 'LOGOUT'});
     }
 
+    const setSeleccionada = (opcionSeleccionada) => {
+        try {
+            dispatch({error: null, type: 'SET_SELECTED', payload: {seleccionada: opcionSeleccionada}});
+        } catch (error) {
+            console.log("error: " + error);
+            dispatch({error: "Error en al tratar de cambiar de pagina", type: 'ERROR_SELECTED', payload: null});
+        }
+    }
 
-    return (<AuthContext.Provider children={children} value={{user, dispatch, logout, loginUser}}/>)
+
+    return (<AuthContext.Provider children={children} value={{user, seleccionada, dispatch, logout, loginUser, setSeleccionada}}/>)
 };
 
 export default AuthProvider;

@@ -5,20 +5,14 @@ import {
     Container, Button
 } from "@mui/material";
 import "../css/Principal.css";
-import Usuarios from "../component/Usuarios";
 import {useAuthContext} from "../context/AuthenticationContext";
-import {useNavigate} from "react-router-dom";
-import Incidencias from "../component/Incidencias";
-import {Ballot, Group, Logout} from "@mui/icons-material";
-import Incidencia from "../component/Incidencia";
+import {useNavigate, Outlet} from "react-router-dom";
+import {Ballot, Group, Logout, PersonAdd} from "@mui/icons-material";
 
 const PrincipalPage = () => {
 
-    const {user, logout} = useAuthContext();
+    const {user, seleccionada, logout, setSeleccionada} = useAuthContext();
     const navigate = useNavigate();
-
-    const [seleccionado, setSeleccionado] = React.useState(1);
-    const [idIncidencia, setIdIncidencia] = React.useState(0);
 
     const selectedStyle = {
         backgroundColor: "white",
@@ -27,14 +21,6 @@ const PrincipalPage = () => {
         fontWeight: "bold"
     }
 
-    React.useEffect(() => {
-        let url = new URL(window.location.href);
-        let id = url.searchParams.get("id");
-        if (typeof id !== "undefined" && id !== null) {
-            setIdIncidencia(parseInt(id));
-            setSeleccionado(3);
-        }
-    }, []);
     return (
         <div>
             <AppBar style={{backgroundColor: "white", boxShadow: "rgba(145, 158, 171, 0.16) 0px 8px 16px 0px"}}>
@@ -42,23 +28,31 @@ const PrincipalPage = () => {
                     <div className="barra">
                         <div className="barra-hijo">
                             <Button color={"inherit"} onClick={(e) => {
-                                setSeleccionado(1);
+                                setSeleccionada(1);
+                                navigate("/r/incidencias");
                             }} startIcon={<Ballot/>}
-                                    style={seleccionado === 1 ? {...selectedStyle, marginRight: 5} : {marginRight: 5}}>
+                                    style={seleccionada === 1 ? {...selectedStyle, marginRight: 5} : {marginRight: 5}}>
                                 Incidencias
                             </Button>
                             {user.idRol === 1 &&
                                 <Button color={"inherit"} onClick={(e) => {
-                                    setSeleccionado(2);
+                                    setSeleccionada(2);
+                                    navigate("/r/usuarios")
                                 }} startIcon={<Group/>}
-                                        style={seleccionado === 2 ? {...selectedStyle} : {}}>
+                                        style={seleccionada === 2 ? {...selectedStyle} : {}}>
                                     Usuarios
                                 </Button>}
-                            {/*<Button color={"inherit"} onClick={(e) => {
-                                setSeleccionado((3))
-                            }}>
-                                Configuración
-                            </Button>*/}
+                            {user.idRol === 1 &&
+                                <Button color={"inherit"} onClick={(e) => {
+                                    setSeleccionada(3);
+                                    navigate("/r/crea");
+                                }} startIcon={<PersonAdd/>}
+                                        style={seleccionada === 3 ? {
+                                            ...selectedStyle,
+                                            marginLeft: 5
+                                        } : {marginLeft: 5}}>
+                                    Usuario
+                                </Button>}
                             <Button color={"inherit"} style={{marginLeft: 5}} onClick={(e) => {
                                 logout();
                                 navigate("/");
@@ -71,12 +65,9 @@ const PrincipalPage = () => {
             </AppBar>
             <Grid container spacing={1} style={{marginTop: 80}}>
                 <Grid item xs={1}>
-
                 </Grid>
                 <Grid item xs={10} style={{textAlign: "center"}}>
-                    {seleccionado === 1 && <Incidencias/>}
-                    {seleccionado === 2 && <Usuarios/>}
-                    {seleccionado === 3 && <Incidencia idIncidencia={idIncidencia}/>}
+                    <Outlet/>
                 </Grid>
                 <Grid item xs={1}>
                 </Grid>

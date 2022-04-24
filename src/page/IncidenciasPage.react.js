@@ -2,13 +2,13 @@ import React from 'react';
 import {Alert, Grid} from "@mui/material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";
-import FormIncidencia from "./FormIncidencia";
-import ListaIncidencias from "./ListaIncidencias";
-import AsignacionIncidencia from "./AsignacionIncidencia";
-import VistaIncidencia from "./VistaIncidencia";
-import FiltrosIncidencia from "./FiltrosIncidencia";
+import FormIncidencia from "../component/incidencia/FormIncidencia";
+import ListaIncidencias from "../component/incidencia/ListaIncidencias";
+import AsignacionIncidencia from "../component/incidencia/AsignacionIncidencia";
+import VistaIncidencia from "../component/incidencia/VistaIncidencia";
+import FiltrosIncidencia from "../component/incidencia/FiltrosIncidencia";
 
-const Incidencias = () => {
+const IncidenciasPage = () => {
     const {user} = useAuthContext();
     const [selectedIncidencia, setSelectedIncidencia] = React.useState(null);
     const [incidencias, setIncidencias] = React.useState([]);
@@ -75,4 +75,4 @@ const Incidencias = () => {
     </Grid>);
 };
 
-export default Incidencias;
+export default IncidenciasPage;

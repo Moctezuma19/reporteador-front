@@ -6,8 +6,8 @@ import {
     Paper, Select,
     TextareaAutosize
 } from "@mui/material";
-import IncidenciaServicio from "../services/IncidenciaServicio";
-import {useAuthContext} from "../context/AuthenticationContext";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
+import {useAuthContext} from "../../context/AuthenticationContext";
 
 const FormRespuesta = ({idIncidencia, agregaRespuesta, estado}) => {
 

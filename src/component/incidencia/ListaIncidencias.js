@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import {Download, NewReleases, ZoomIn} from "@mui/icons-material";
 import React from "react";
-import {useAuthContext} from "../context/AuthenticationContext";
-import {fecha} from "../util/Util";
+import {useAuthContext} from "../../context/AuthenticationContext";
+import {fecha} from "../../util/Util";
 
 const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const {user} = useAuthContext();

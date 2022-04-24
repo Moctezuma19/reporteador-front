@@ -11,7 +11,7 @@ import {
     Button
 } from "@mui/material";
 import {Search} from "@mui/icons-material";
-import UsuarioServicio from "../services/UsuarioServicio";
+import UsuarioServicio from "../../services/UsuarioServicio";
 
 const FiltrosUsuarios = ({setUsuarios}) => {
     const [filtro, setFiltro] = React.useState({

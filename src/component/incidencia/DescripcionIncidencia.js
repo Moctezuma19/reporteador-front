@@ -1,10 +1,10 @@
 import React from 'react';
 import {Box, Button, Divider, IconButton, Modal, Paper, Tooltip, Typography} from "@mui/material";
 import {Close, Download, ZoomIn} from "@mui/icons-material";
-import {useAuthContext} from "../context/AuthenticationContext";
-import {fecha} from "../util/Util";
-import IncidenciaServicio from "../services/IncidenciaServicio";
-import ImagenServicio from "../services/ImagenServicio";
+import {useAuthContext} from "../../context/AuthenticationContext";
+import {fecha} from "../../util/Util";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
+import ImagenServicio from "../../services/ImagenServicio";
 import {useNavigate} from "react-router-dom";
 
 const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas, cerrable = true}) => {
@@ -94,7 +94,7 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas, cerrable 
             </IconButton>}
             <Typography variant={"h6"}>
                 {incidencia.titulo} {cerrable && <Tooltip title={"Ver individualmente"}><IconButton onClick={(e) => {
-                navigate(`/principal?id=${incidencia.idIncidencia}`)
+                navigate(`/r/incidencia?id=${incidencia.idIncidencia}`)
                 window.location.reload();
             }}>
                 <ZoomIn/>

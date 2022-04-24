@@ -1,6 +1,6 @@
 import React from 'react';
-import {useAuthContext} from "../context/AuthenticationContext";
-import IncidenciaServicio from "../services/IncidenciaServicio";
+import {useAuthContext} from "../../context/AuthenticationContext";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
 import {Stack} from "@mui/material";
 import DescripcionIncidencia from "./DescripcionIncidencia";
 import FormRespuesta from "./FormRespuesta";
@@ -27,7 +27,7 @@ const Incidencia = ({idIncidencia}) => {
             console.log("error: " + error);
         })
 
-    }, []);
+    }, [idIncidencia]);
 
     React.useEffect(() => {
         incidenciaServicio.obtenRespuestas(idIncidencia).then(({data}) => {

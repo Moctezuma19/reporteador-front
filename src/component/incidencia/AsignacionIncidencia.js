@@ -11,10 +11,10 @@ import {
     Select,
     Typography
 } from "@mui/material";
-import UsuarioServicio from "../services/UsuarioServicio";
-import IncidenciaServicio from "../services/IncidenciaServicio";
+import UsuarioServicio from "../../services/UsuarioServicio";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
 import {Close, Download} from "@mui/icons-material";
-import ImagenServicio from "../services/ImagenServicio";
+import ImagenServicio from "../../services/ImagenServicio";
 
 const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
 

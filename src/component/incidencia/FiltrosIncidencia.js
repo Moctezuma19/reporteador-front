@@ -9,10 +9,10 @@ import {
     Button, MenuItem, OutlinedInput, Select, TextField
 } from "@mui/material";
 import {Search} from "@mui/icons-material";
-import IncidenciaServicio from "../services/IncidenciaServicio";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
-import {useAuthContext} from "../context/AuthenticationContext";
+import {useAuthContext} from "../../context/AuthenticationContext";
 
 const FiltrosIncidencia = ({setIncidencias, setIncidencia}) => {
     const {user} = useAuthContext();

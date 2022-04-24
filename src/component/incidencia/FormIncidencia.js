@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import {Add, Delete, ExpandMore} from "@mui/icons-material";
 import React from "react";
-import IncidenciaServicio from "../services/IncidenciaServicio";
-import {useAuthContext} from "../context/AuthenticationContext";
+import IncidenciaServicio from "../../services/IncidenciaServicio";
+import {useAuthContext} from "../../context/AuthenticationContext";
 
 const FormIncidencia = ({agregaIncidencia}) => {
 

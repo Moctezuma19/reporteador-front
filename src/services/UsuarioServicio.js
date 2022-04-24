@@ -2,6 +2,11 @@ import {ApiProtected as http} from "../config/axios";
 import {baseUrl} from "../util/Constants";
 
 class UsuarioServicio {
+
+    obten(idUsuario) {
+        return http.get(baseUrl + `/usuario/${idUsuario}`);
+    }
+
     obtenTodos() {
         return http.get(baseUrl + "/usuario/todos");
     }

@@ -1,76 +1,56 @@
 import React from 'react';
-import {
-    Alert,
-    Box,
-    Button,
-    FormControl,
-    InputLabel, MenuItem,
-    Paper,
-    Select,
-    TextField
-} from "@mui/material";
-import {
-    Edit,
-    Group,
-    Key,
-    Refresh,
-    Visibility,
-    VisibilityOff
-} from "@mui/icons-material";
-import UsuarioServicio from "../services/UsuarioServicio";
+import UsuarioServicio from "../../services/UsuarioServicio";
+import {Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField} from "@mui/material";
+import {Edit, Group, Key, Refresh, Visibility, VisibilityOff} from "@mui/icons-material";
+import {useAuthContext} from "../../context/AuthenticationContext";
+import {useNavigate} from "react-router-dom";
 
-const FormUsuario = ({agregaUsuario}) => {
-    const usuario_ = {
+const EditaUsuario = ({idUsuario}) => {
+    const {user} = useAuthContext();
+    const [message, setMessage] = React.useState(null);
+    const [usuario, setUsuario] = React.useState({
         nombre: "",
         apellido: "",
         correo: "",
         password: "",
         password_repeat: "",
-        idRol: 3
-    }
-    const [message, setMessage] = React.useState(null)
-    const [usuario, setUsuario] = React.useState({...usuario_});
+        idRol: 2
+    });
     const [viewPassword, setViewPassword] = React.useState(false);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
-
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!usuario.nombre ||
-            !usuario.apellido ||
-            !usuario.correo ||
-            !usuario.password ||
-            !usuario.password_repeat) {
+            !usuario.apellido || !usuario.correo) {
             setMessage({texto: "Todos los campos son necesarios.", type: "warning"});
             return;
         }
-        if (usuario.password.length < 10) {
+
+        if (usuario.password.length < 10 && usuario.password.length > 0) {
             setMessage({texto: "La contraseña debe tener 10 caracteres", type: "warning"})
             return;
         }
 
-        if (usuario.password !== usuario.password_repeat) {
+        if (usuario.password.length > 0 && usuario.password !== usuario.password_repeat) {
             setMessage({texto: "Las contraseñas deben coincidir", type: "warning"});
         }
 
-        let obj = {...usuario, token: "", idUsuario: 0};
+        let obj = {...usuario};
         delete obj["password_repeat"];
-        console.log("exito", obj);
+        delete obj["rol"];
 
-        usuarioServicio.registra(obj).then((response) => {
-            console.log("data", response)
+        usuarioServicio.actualiza(obj).then((response) => {
             let data = response.data;
             if (typeof data !== "undefined" && data !== null && typeof data !== "string") {
-                setMessage({texto: "El usuario se registro con éxito.", type: "success"});
-                agregaUsuario(data);
-                setTimeout(() => {
-                    setUsuario({...usuario_});
-                }, 2000)
+                setMessage({texto: "El usuario se actualizo con éxito.", type: "success"});
+
             } else {
                 setMessage({texto: "El correo ya esta registrado, intenta con otro.", type: "warning"});
             }
         }).catch((error) => {
-            setMessage({texto: "No se pudo registrar al usuario, error interno del servidor.", type: "error"});
+            setMessage({texto: "No se pudo actualizar al usuario, error interno del servidor.", type: "error"});
             console.log("error: " + error);
         });
 
@@ -82,25 +62,51 @@ const FormUsuario = ({agregaUsuario}) => {
     }
 
     const generateRandomPassword = () => {
-        let p = Math.random().toString(36).substring(2, 12);
+        let p = Math.random().toString(36).substring(2, 10);
         setUsuario({...usuario, password: p, password_repeat: p});
     }
 
     const boxStyle = {display: 'flex', alignItems: 'flex-end', paddingLeft: 10, paddingRight: 10, marginTop: 1}
 
-    return (<Paper elevation={3} style={{borderRadius: 16}}>
+    React.useEffect(() => {
+        if (user.idRol !== 1) {
+            navigate("/403");
+        }
+        if (idUsuario === 0) {
+            return;
+        }
+        usuarioServicio.obten(idUsuario).then(({data}) => {
+            if (typeof data !== "undefined" && data !== null) {
+                let obj = {
+                    ...data,
+                    password: "",
+                    password_repeat: "",
+                    idRol: data.rol.idRol
+                }
+                delete obj["eliminado"];
+                setUsuario(obj);
+            }
+        }).catch((error) => {
+            console.log("error: " + error);
+        })
+    }, [idUsuario]);
+
+    return (<Grid container>
+        <Grid item xs={3}>
+        </Grid>
+        <Grid item xs={6}><Paper elevation={3} style={{borderRadius: 16}}>
             <form onSubmit={handleSubmit} style={{paddingTop: 15, paddingBottom: 15}}>
                 <Box>
-                    <h2>Nuevo usuario</h2>
+                    <h2>Edita usuario</h2>
                 </Box>
                 {message !== null &&
-                <Box sx={{marginTop: 3, paddingLeft: 10, paddingRight: 10}}>
-                    <Alert severity={message.type} onClose={() => {
-                        setMessage(null);
-                    }}>
-                        {message.texto}
-                    </Alert>
-                </Box>}
+                    <Box sx={{marginTop: 3, paddingLeft: 10, paddingRight: 10}}>
+                        <Alert severity={message.type} onClose={() => {
+                            setMessage(null);
+                        }}>
+                            {message.texto}
+                        </Alert>
+                    </Box>}
                 <Box sx={boxStyle}>
                     <Edit sx={{color: 'action.active', mr: 1, my: 0.5}}/>
                     <TextField color="success" fullWidth label="Nombre" name="firstname" variant="standard"
@@ -174,7 +180,7 @@ const FormUsuario = ({agregaUsuario}) => {
                                    }
                                }}/>
                 </Box>
-                <Box sx={boxStyle}>
+                {usuario.idRol !== 1 && <Box sx={boxStyle}>
                     <Group sx={{color: 'action.active', mr: 1, my: 0.5}}/>
                     <FormControl variant={"standard"} sx={{m: 1, minWidth: 120}}>
                         <InputLabel>Rol</InputLabel>
@@ -189,15 +195,17 @@ const FormUsuario = ({agregaUsuario}) => {
                             </MenuItem>
                         </Select>
                     </FormControl>
-                </Box>
+                </Box>}
                 <Box sx={{paddingLeft: 10, paddingRight: 10, marginTop: 5}}>
-                    <Button variant="contained" color="success" type="submit"> Registrar </Button>
+                    <Button variant="contained" color="success" type="submit"> Actualizar </Button> <span></span>
                 </Box>
             </form>
 
         </Paper>
+        </Grid>
+        <Grid item xs={3}>
+        </Grid>
+    </Grid>);
+}
 
-    );
-};
-
-export default FormUsuario;
+export default EditaUsuario;
