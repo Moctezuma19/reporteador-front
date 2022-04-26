@@ -5,9 +5,9 @@ import {
 import {
     Edit, Group, Key, Refresh, Visibility, VisibilityOff
 } from "@mui/icons-material";
-import UsuarioServicio from "../../services/UsuarioServicio";
+import UsuarioServicio from "../services/UsuarioServicio";
 
-const FormUsuario = () => {
+const FormUsuarioPage = () => {
     const usuario_ = {
         nombre: "", apellido: "", correo: "", password: "", password_repeat: "", idRol: 3
     }
@@ -185,4 +185,4 @@ const FormUsuario = () => {
         </Grid>);
 };
 
-export default FormUsuario;
+export default FormUsuarioPage;

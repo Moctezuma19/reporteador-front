@@ -5,12 +5,11 @@ import {
     TableCell,
     TableHead,
     TablePagination,
-    TableRow, Tooltip
+    TableRow,
 } from "@mui/material";
-import {Download, NewReleases, ZoomIn} from "@mui/icons-material";
 import React from "react";
 import {useAuthContext} from "../../context/AuthenticationContext";
-import {fecha} from "../../util/Util";
+import RenglonIncidencia from "./RenglonIncidencia";
 
 const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
     const {user} = useAuthContext();
@@ -63,65 +62,11 @@ const ListaIncidencias = ({incidencias, setSelectedIncidencia}) => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {paginaIncidencias.map((incidencia, k) => {
-                    return (<TableRow key={`tr-${k}`}>
-                        <TableCell style={{color: "#717675"}}>
-                            {incidencia.idIncidencia}
-                        </TableCell>
-                        <TableCell style={{color: "#717675"}}>
-                            {incidencia.titulo.length > 15 ?
-                                (<Tooltip title={incidencia.titulo}><span>{incidencia.titulo.substring(0, 15) +
-                                    "..."}</span></Tooltip>) : <span>{incidencia.titulo}</span>}
-                        </TableCell>
-                        {user.idRol !== 3 && <TableCell style={{color: "#717675"}}>
-                            {incidencia.usuario !== null ? `${incidencia.usuario.nombre} ${incidencia.usuario.apellido}` : "-"}
-                        </TableCell>}
-                        <TableCell style={{color: "#717675"}}>
-                            {fecha(incidencia.creacion)}
-                        </TableCell>
-                        <TableCell style={{color: "#717675"}}>
-                            {fecha(incidencia.actualizacion)}
-                        </TableCell>
-                        {user.idRol !== 2 && <TableCell style={{color: "#717675"}}>
-                            {incidencia.asignacion !== null ? incidencia.asignacion.usuario.nombre + " " + incidencia.asignacion.usuario.apellido : "-"}
-                        </TableCell>}
-                        <TableCell style={{color: "#717675"}}>
-                            {incidencia.estado === 0 ?
-                                <div><span className="exito-estado">abierta</span> {incidencia.asignacion === null &&
-                                    <Tooltip
-                                        title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
-                                        color={"error"}/></Tooltip>}</div> :
-                                incidencia.estado === 1 ?
-                                    <span className="proceso-estado">en proceso</span> :
-                                    incidencia.estado === 2 ?
-                                        <span className="cerrado-estado">cerrada</span> :
-                                        incidencia.estado === 3 ?
-                                            <span className="advertencia-estado">pendiente por el usuario</span> :
-                                            incidencia.estado === 4 ?
-                                                <span className="advertencia-estado">pendiente por el proveedor</span> :
-                                                <div><span className="advertencia-estado">pendiente</span> <Tooltip
-                                                    title={user.idRol === 1 ? "Sin ingeniero de servicio asignado" : "Pendiente de asignar"}><NewReleases
-                                                    color={"error"}/></Tooltip></div>
-                            }
-                        </TableCell>
-                        <TableCell>
-                            <div style={{display: "flex"}}>
-                                <Tooltip title={"Ver a detalle"}>
-                                    <ZoomIn className={"icon-users"} onClick={(e) => {
-                                        setSelectedIncidencia(incidencia);
-                                    }}/>
-                                </Tooltip>
-                                {user.idRol === 1 && <Tooltip title={"Descargar reporte"}>
-                                    <Download className={"icon-users"}/>
-                                </Tooltip>}
-
-                            </div>
-                        </TableCell>
-                    </TableRow>)
-
+                {paginaIncidencias.map((idIncidencia, k) => {
+                    return (<RenglonIncidencia key={`inc-${k}`} idIncidencia={idIncidencia}
+                                               setSelectedIncidencia={setSelectedIncidencia}/>)
                 })}
             </TableBody>
-
         </Table>
         <TablePagination
             rowsPerPageOptions={[10]}

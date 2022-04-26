@@ -11,7 +11,11 @@ import EdicionUsuarioPage from "./page/EdicionUsuarioPage.react";
 import IncidenciaPage from "./page/IncidenciaPage.react";
 import IncidenciasPage from "./page/IncidenciasPage.react";
 import UsuariosPage from "./page/UsuariosPage.react";
-import FormUsuario from "./component/usuario/FormUsuario";
+import FormUsuarioPage from "./page/FormUsuarioPage";
+
+import "./css/Principal.css";
+import FormIncidenciaPage from "./page/FormIncidenciaPage.react";
+import AsignacionIncidenciaPage from "./page/AsignacionIncidenciaPage.react";
 
 function App() {
     const {user} = useAuthContext();
@@ -35,7 +39,9 @@ function App() {
                 <Route path={"/r/incidencia"} element={protectedRoute(IncidenciaPage)}/>
                 <Route path={"/r/incidencias"} element={protectedRoute(IncidenciasPage)}/>
                 <Route path={"/r/usuarios"} element={protectedRoute(UsuariosPage)}/>
-                <Route path={"/r/crea"} element={protectedRoute(FormUsuario)}/>
+                <Route path={"/r/crea"} element={protectedRoute(FormUsuarioPage)}/>
+                <Route path={"/r/reporta"} element={protectedRoute(FormIncidenciaPage)}/>
+                <Route path={"/r/asignacion"} element={protectedRoute(AsignacionIncidenciaPage)}/>
             </Route>
 
             <Route path={"/acceso-prohibido"} element={<Page403/>}/>

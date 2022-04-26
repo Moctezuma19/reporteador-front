@@ -7,7 +7,7 @@ import {
 import "../css/Principal.css";
 import {useAuthContext} from "../context/AuthenticationContext";
 import {useNavigate, Outlet} from "react-router-dom";
-import {Ballot, Group, Logout, PersonAdd} from "@mui/icons-material";
+import {AddBox, Ballot, Group, Logout, PersonAdd} from "@mui/icons-material";
 
 const PrincipalPage = () => {
 
@@ -34,20 +34,28 @@ const PrincipalPage = () => {
                                     style={seleccionada === 1 ? {...selectedStyle, marginRight: 5} : {marginRight: 5}}>
                                 Incidencias
                             </Button>
-                            {user.idRol === 1 &&
+                            {user.idRol === 3 &&
                                 <Button color={"inherit"} onClick={(e) => {
                                     setSeleccionada(2);
-                                    navigate("/r/usuarios")
-                                }} startIcon={<Group/>}
-                                        style={seleccionada === 2 ? {...selectedStyle} : {}}>
-                                    Usuarios
+                                    navigate("/r/reporta")
+                                }} startIcon={<AddBox/>}
+                                        style={seleccionada === 2 ? {...selectedStyle, marginRight: 5} : {marginRight: 5}}>
+                                    Incidencia
                                 </Button>}
                             {user.idRol === 1 &&
                                 <Button color={"inherit"} onClick={(e) => {
                                     setSeleccionada(3);
+                                    navigate("/r/usuarios")
+                                }} startIcon={<Group/>}
+                                        style={seleccionada === 3 ? {...selectedStyle} : {}}>
+                                    Usuarios
+                                </Button>}
+                            {user.idRol === 1 &&
+                                <Button color={"inherit"} onClick={(e) => {
+                                    setSeleccionada(4);
                                     navigate("/r/crea");
                                 }} startIcon={<PersonAdd/>}
-                                        style={seleccionada === 3 ? {
+                                        style={seleccionada === 4 ? {
                                             ...selectedStyle,
                                             marginLeft: 5
                                         } : {marginLeft: 5}}>

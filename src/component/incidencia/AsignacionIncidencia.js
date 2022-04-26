@@ -15,19 +15,22 @@ import UsuarioServicio from "../../services/UsuarioServicio";
 import IncidenciaServicio from "../../services/IncidenciaServicio";
 import {Close, Download} from "@mui/icons-material";
 import ImagenServicio from "../../services/ImagenServicio";
+import {useNavigate} from "react-router-dom";
+import {INCIDENCIA_DEFAULT} from "../../util/Constants";
 
-const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
+const AsignacionIncidencia = ({idIncidencia}) => {
 
+    const [incidencia, setIncidencia] = React.useState(INCIDENCIA_DEFAULT);
     const [ingenieros, setIngenieros] = React.useState([]);
     const [idIngeniero, setIdIngeniero] = React.useState(0);
     const [message, setMessage] = React.useState(null);
-    const [descripcion, setDescripcion] = React.useState("");
     const [imagen1, setImagen1] = React.useState(null);
     const [imagen2, setImagen2] = React.useState(null);
     const [selectedImage, setSelectedImage] = React.useState(0);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
     const imagenServicio = React.useMemo(() => new ImagenServicio(), []);
+    const navigate = useNavigate();
 
     const style = {
         position: 'absolute',
@@ -47,7 +50,7 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         }
         incidenciaServicio.asigna(idIngeniero, incidencia.idIncidencia).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                editaIncidencia(data);
+                navigate(`/r/incidencia?id=${incidencia.idIncidencia}`);
                 //setMessage({text: "Se ha asignado la incidencia con éxito.", type: "success"});
             } else {
                 setMessage({text: "No se pudo asignar la incidencia.", type: "error"});
@@ -70,43 +73,38 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
     }, []);
 
     React.useEffect(() => {
-        incidenciaServicio.obtenDescripcion(incidencia.idIncidencia).then(({data}) => {
+        if (idIncidencia === 0) {
+            return;
+        }
+        incidenciaServicio.obten(idIncidencia).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                setDescripcion(data);
+                setIncidencia(data);
+                if (data.imagen1 !== null) {
+                    imagenServicio.obtenImagen(data.imagen1).then(({data}) => {
+                        if (typeof data !== "undefined" && data !== null) {
+                            setImagen1(data);
+                        }
+                    }).catch((error) => {
+                        console.log("error: " + error);
+                    });
+                }
+                if (data.imagen2 !== null) {
+                    imagenServicio.obtenImagen(data.imagen2).then(({data}) => {
+                        if (typeof data !== "undefined" && data !== null) {
+                            setImagen2(data);
+                        }
+                    }).catch((error) => {
+                        console.log("error: " + error);
+                    });
+                }
             }
         }).catch((error) => {
             console.log("error: " + error);
-        });
-
-        if (incidencia.imagen1 !== null) {
-            imagenServicio.obtenImagen(incidencia.imagen1).then(({data}) => {
-                if (typeof data !== "undefined" && data !== null) {
-                    setImagen1(data);
-                }
-            }).catch((error) => {
-                console.log("error: " + error);
-            });
-        }
-        if (incidencia.imagen2 !== null) {
-            imagenServicio.obtenImagen(incidencia.imagen2).then(({data}) => {
-                if (typeof data !== "undefined" && data !== null) {
-                    setImagen2(data);
-                }
-            }).catch((error) => {
-                console.log("error: " + error);
-            });
-        }
-    }, [incidencia]);
-
+        })
+    }, [idIncidencia]);
 
     return (<Paper style={{textAlign: "left", padding: "1em", borderRadius: 16}}>
         <Box>
-            <IconButton style={{float: "right"}} onClick={(e) => {
-                setIncidencia(null);
-            }}>
-                <Close/>
-            </IconButton>
-
             <Typography variant={"h6"}>
                 {incidencia.titulo}
             </Typography>
@@ -119,30 +117,30 @@ const AsignacionIncidencia = ({incidencia, setIncidencia, editaIncidencia}) => {
         </Alert>}
         <Box>
             <b>Autor: </b>
-            {incidencia.usuario.nombre + " " + incidencia.usuario.apellido}
+            {incidencia.usuario?.nombre + " " + incidencia.usuario?.apellido}
         </Box>
         <Box>
             <b>Descripción: </b>
-            <p>{descripcion}</p>
+            <p>{incidencia.descripcion}</p>
         </Box>
         <Box>
             <div style={{display: "flex"}}>
                 {imagen1 !== null &&
-                <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
-                     src={`data:image/jpeg;base64, ${imagen1}`}
-                     onClick={(e) => {
-                         setSelectedImage(1);
-                     }}
-                />}
+                    <img alt="imagen-incidencia" className="blur-imagen" style={{marginTop: 10, cursor: "pointer"}}
+                         src={`data:image/jpeg;base64, ${imagen1}`}
+                         onClick={(e) => {
+                             setSelectedImage(1);
+                         }}
+                    />}
 
                 {imagen2 !== null &&
-                <img alt="imagen-incidencia" className="blur-imagen"
-                     style={{marginLeft: 10, marginTop: 10, cursor: "pointer"}}
-                     src={`data:image/jpeg;base64, ${imagen2}`}
-                     onClick={(e) => {
-                         setSelectedImage(2);
-                     }}
-                />}
+                    <img alt="imagen-incidencia" className="blur-imagen"
+                         style={{marginLeft: 10, marginTop: 10, cursor: "pointer"}}
+                         src={`data:image/jpeg;base64, ${imagen2}`}
+                         onClick={(e) => {
+                             setSelectedImage(2);
+                         }}
+                    />}
             </div>
         </Box>
         <Box>

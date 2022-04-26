@@ -1,18 +1,16 @@
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary, Alert,
+    Alert,
     Box, Button, Modal, Paper,
     TextareaAutosize,
-    TextField,
-    Typography
+    TextField
 } from "@mui/material";
-import {Add, Delete, ExpandMore} from "@mui/icons-material";
+import {Add, Delete} from "@mui/icons-material";
 import React from "react";
-import IncidenciaServicio from "../../services/IncidenciaServicio";
-import {useAuthContext} from "../../context/AuthenticationContext";
+import IncidenciaServicio from "../services/IncidenciaServicio";
+import {useAuthContext} from "../context/AuthenticationContext";
+import {useNavigate} from "react-router-dom";
 
-const FormIncidencia = ({agregaIncidencia}) => {
+const FormIncidenciaPage = () => {
 
     const {user} = useAuthContext();
     const [message, setMessage] = React.useState(null);
@@ -24,8 +22,8 @@ const FormIncidencia = ({agregaIncidencia}) => {
         imagen2: null
     }
     const [formIncidencia, setFormIncidencia] = React.useState({...formIncidencia_});
-
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
+    const navigate = useNavigate();
 
     const handleChangeTitulo = (e) => {
         setFormIncidencia({...formIncidencia, titulo: e.target.value});
@@ -74,8 +72,7 @@ const FormIncidencia = ({agregaIncidencia}) => {
             ...formIncidencia, idUsuario: user.idUsuario
         }*/).then(({data}) => {
             if (typeof data !== "undefined" && data !== null) {
-                agregaIncidencia(data);
-                setFormIncidencia({...formIncidencia_});
+                navigate(`/r/incidencia?id=${data.idIncidencia}`);
                 setMessage({text: "La incidencia se ha creado con éxito.", type: "success"});
             } else {
                 setMessage({text: "No se pudo crear la incidencia", type: "error"});
@@ -98,73 +95,68 @@ const FormIncidencia = ({agregaIncidencia}) => {
     };
 
     return (<Paper elevation={3} style={{borderRadius: 16}}>
-        <Accordion style={{borderRadius: 16}}>
-            <AccordionSummary expandIcon={<ExpandMore/>}>
-                <Typography variant={"h6"}>Nueva incidencia</Typography>
-            </AccordionSummary>
-            <AccordionDetails style={{textAlign: "left"}}>
-                {message !== null && <Alert style={{marginBottom: 5}} severity={message.type} onClose={(e) => {
-                    setMessage(null);
-                }}>
-                    {message.text}
-                </Alert>}
-                <form onSubmit={handleSubmitIncidencia}>
-                    <Box>
-                        <TextField label="Titulo" name="titulo" value={formIncidencia.titulo}
-                                   onChange={handleChangeTitulo} variant="standard"/>
-                    </Box>
-                    <br/>
-                    <Box>
-                        <TextareaAutosize placeholder={"Introduce la descripción del problema."}
-                                          value={formIncidencia.descripcion}
-                                          onChange={handleChangeDescripcion}
-                                          maxLength={2048} style={{
-                            width: "41.2em",
-                            height: "10em",
-                            minHeight: "10em",
-                            maxHeight: "10em",
-                            borderRadius: 8
-                        }}/>
 
-                    </Box>
-                    <Box style={{display: "flex", marginTop: 10}}>
-                        {formIncidencia.imagen1 === null && <label htmlFor="contained-button-file">
-                            <input accept="image/*" id="contained-button-file" type="file"
-                                   style={{display: "none"}} onChange={handleChangeImagen1}/>
-                            <Button variant={"contained"} className="add-imagen" style={{marginRight: 10}}
-                                    component="span">
-                                <Add/>
-                            </Button>
-                        </label>}
-                        {formIncidencia.imagen1 !== null &&
+        <div style={{textAlign: "left", padding: 22}}>
+            {message !== null && <Alert style={{marginBottom: 5}} severity={message.type} onClose={(e) => {
+                setMessage(null);
+            }}>
+                {message.text}
+            </Alert>}
+            <form onSubmit={handleSubmitIncidencia}>
+                <Box>
+                    <TextField label="Titulo" name="titulo" value={formIncidencia.titulo}
+                               onChange={handleChangeTitulo} variant="standard"/>
+                </Box>
+                <br/>
+                <Box>
+                    <TextareaAutosize placeholder={"Introduce la descripción del problema."}
+                                      value={formIncidencia.descripcion}
+                                      onChange={handleChangeDescripcion}
+                                      maxLength={2048} style={{
+                        width: "41.2em",
+                        height: "10em",
+                        minHeight: "10em",
+                        maxHeight: "10em",
+                        borderRadius: 8
+                    }}/>
+
+                </Box>
+                <Box style={{display: "flex", marginTop: 10}}>
+                    {formIncidencia.imagen1 === null && <label htmlFor="contained-button-file">
+                        <input accept="image/*" id="contained-button-file" type="file"
+                               style={{display: "none"}} onChange={handleChangeImagen1}/>
+                        <Button variant={"contained"} className="add-imagen" style={{marginRight: 10}}
+                                component="span">
+                            <Add/>
+                        </Button>
+                    </label>}
+                    {formIncidencia.imagen1 !== null &&
                         <img alt="imagen1" className="blur-imagen" style={{marginRight: 12, cursor: "pointer"}}
                              src={URL.createObjectURL(formIncidencia.imagen1)} onClick={(e) => {
                             setSelectedImage(1);
                         }}/>
-                        }
+                    }
 
-                        {formIncidencia.imagen2 === null && <label htmlFor="contained-button-file-2">
-                            <input accept="image/*" id="contained-button-file-2" type="file"
-                                   style={{display: "none"}} onChange={handleChangeImagen2}/>
-                            <Button variant={"contained"} className="add-imagen" component="span">
-                                <Add/>
-                            </Button>
-                        </label>}
-                        {formIncidencia.imagen2 !== null &&
+                    {formIncidencia.imagen2 === null && <label htmlFor="contained-button-file-2">
+                        <input accept="image/*" id="contained-button-file-2" type="file"
+                               style={{display: "none"}} onChange={handleChangeImagen2}/>
+                        <Button variant={"contained"} className="add-imagen" component="span">
+                            <Add/>
+                        </Button>
+                    </label>}
+                    {formIncidencia.imagen2 !== null &&
                         <img alt="imagen2" className="blur-imagen" style={{cursor: "pointer"}}
                              src={URL.createObjectURL(formIncidencia.imagen2)} onClick={(e) => {
                             setSelectedImage(2);
                         }}/>
-                        }
-                    </Box>
-                    <Box style={{marginTop: 10, marginBottom: 15, float: "right"}}>
-                        <Button type={"submit"} variant={"contained"}
-                                color={"success"}> Enviar </Button>
-
-                    </Box>
-                </form>
-            </AccordionDetails>
-        </Accordion>
+                    }
+                </Box>
+                <Box style={{marginTop: -39, float: "right"}}>
+                    <Button type={"submit"} variant={"contained"}
+                            color={"success"}> Enviar </Button>
+                </Box>
+            </form>
+        </div>
         {selectedImage !== 0 && <Modal
             open={selectedImage !== 0}
             onClose={(e) => {
@@ -193,4 +185,4 @@ const FormIncidencia = ({agregaIncidencia}) => {
 
 }
 
-export default FormIncidencia;
+export default FormIncidenciaPage;

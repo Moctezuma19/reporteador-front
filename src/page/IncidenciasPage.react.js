@@ -2,9 +2,9 @@ import React from 'react';
 import {Alert, Grid} from "@mui/material";
 import IncidenciaServicio from "../services/IncidenciaServicio";
 import {useAuthContext} from "../context/AuthenticationContext";
-import FormIncidencia from "../component/incidencia/FormIncidencia";
+import FormIncidenciaPageReact from "./FormIncidenciaPage.react";
 import ListaIncidencias from "../component/incidencia/ListaIncidencias";
-import AsignacionIncidencia from "../component/incidencia/AsignacionIncidencia";
+import AsignacionIncidenciaPageReact from "../component/incidencia/AsignacionIncidencia";
 import VistaIncidencia from "../component/incidencia/VistaIncidencia";
 import FiltrosIncidencia from "../component/incidencia/FiltrosIncidencia";
 
@@ -55,16 +55,6 @@ const IncidenciasPage = () => {
                     </Alert>}
                     {incidencias.length > 0 &&
                         <ListaIncidencias incidencias={incidencias} setSelectedIncidencia={setSelectedIncidencia}/>}
-                </Grid>
-                <Grid item xs={12} style={{marginTop: 20}}>
-                    {user.idRol === 3 && selectedIncidencia === null &&
-                        <FormIncidencia agregaIncidencia={agregaIncidencia}/>}
-                    {selectedIncidencia !== null && user.idRol === 1 && selectedIncidencia.asignacion === null ?
-                        <AsignacionIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
-                                              editaIncidencia={asignaIncidencia}/>:
-                        <VistaIncidencia incidencia={selectedIncidencia} setIncidencia={setSelectedIncidencia}
-                                         editaIncidencia={editaIncidencia}/>
-                    }
                 </Grid>
             </Grid>
 
