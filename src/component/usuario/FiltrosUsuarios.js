@@ -31,6 +31,10 @@ const FiltrosUsuarios = ({setUsuarios}) => {
         setFiltro({...filtro, nombre: e.target.value});
     }
 
+    const handleChangeEsAdministrador = (e) => {
+        setFiltro({...filtro, esAdministrador: !filtro.esAdministrador});
+    }
+
     const handleChangeEsIngeniero = (e) => {
         setFiltro({...filtro, esIngeniero: !filtro.esIngeniero});
     }
@@ -54,7 +58,6 @@ const FiltrosUsuarios = ({setUsuarios}) => {
         }
         obj.idRoles = [...idRoles];
         usuarioServicio.filtra(obj).then(({data}) => {
-            console.log("data", data)
             setUsuarios(data);
         }).catch((error) => {
             console.log("error: " + error);
@@ -92,7 +95,7 @@ const FiltrosUsuarios = ({setUsuarios}) => {
                         <b>Rol</b>
                         <div style={{display: "flex"}}>
                             <FormControlLabel
-                                control={<Checkbox checked={filtro.esAdministrador} onClick={handleChangeEsIngeniero}/>}
+                                control={<Checkbox checked={filtro.esAdministrador} onClick={handleChangeEsAdministrador}/>}
                                 label="Administrador"/>
                             <FormControlLabel
                                 control={<Checkbox checked={filtro.esIngeniero} onClick={handleChangeEsIngeniero}/>}

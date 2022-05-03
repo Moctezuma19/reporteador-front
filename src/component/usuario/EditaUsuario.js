@@ -62,7 +62,7 @@ const EditaUsuario = ({idUsuario}) => {
     }
 
     const generateRandomPassword = () => {
-        let p = Math.random().toString(36).substring(2, 10);
+        let p = Math.random().toString(36).substring(2, 12);
         setUsuario({...usuario, password: p, password_repeat: p});
     }
 

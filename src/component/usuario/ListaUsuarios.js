@@ -37,7 +37,7 @@ const ListaUsuarios = ({usuarios, eliminaUsuario, setMessage}) => {
         usuarioServicio.elimina(id).then(({data}) => {
             if (data) {
                 eliminaUsuario(id);
-                setMessage({text: "El usuario se elimino correctamente.", type: "success"});
+                setMessage({text: "El usuario se eliminó correctamente.", type: "success"});
             } else {
                 setMessage({text: "No se pudo elimnar al usuario.", type: "error"});
             }
@@ -82,7 +82,8 @@ const ListaUsuarios = ({usuarios, eliminaUsuario, setMessage}) => {
             </TableHead>
             <TableBody>
                 {paginaUsuarios.map((idUsuario, k) =>
-                    (<RenglonUsuario key={`u-${k}`} idUsuario={idUsuario} handleElimina={handleElimina} style={style}/>)
+                    (<RenglonUsuario key={`u-${k}`} idUsuario={idUsuario} handleElimina={handleElimina} style={style}
+                                     showModal={showModal} setShowModal={setShowModal}/>)
                 )}
             </TableBody>
         </Table>

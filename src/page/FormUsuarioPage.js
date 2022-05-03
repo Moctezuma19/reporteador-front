@@ -34,16 +34,12 @@ const FormUsuarioPage = () => {
 
         let obj = {...usuario, token: "", idUsuario: 0};
         delete obj["password_repeat"];
-        console.log("exito", obj);
 
         usuarioServicio.registra(obj).then((response) => {
-            console.log("data", response)
             let data = response.data;
             if (typeof data !== "undefined" && data !== null && typeof data !== "string") {
+                setUsuario({...usuario_});
                 setMessage({texto: "El usuario se registro con éxito.", type: "success"});
-                setTimeout(() => {
-                    setUsuario({...usuario_});
-                }, 2000)
             } else {
                 setMessage({texto: "El correo ya esta registrado, intenta con otro.", type: "warning"});
             }
@@ -125,7 +121,6 @@ const FormUsuarioPage = () => {
                                                }
                                            }
                                            if (e.target.value.length <= 10) {
-
                                                handleChangeCampo("password", e.target.value);
                                            }
                                        }}/>

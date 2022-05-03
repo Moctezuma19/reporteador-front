@@ -39,7 +39,7 @@ const UsuariosPage = () => {
     }, []);
 
     const eliminaUsuario = (id) => {
-        setUsuarios(usuarios.filter(x => x.idUsuario !== id));
+        setUsuarios(usuarios.filter(x => x !== id));
     }
 
     return (<Box>

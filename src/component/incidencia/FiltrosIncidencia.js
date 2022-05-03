@@ -57,6 +57,7 @@ const FiltrosIncidencia = ({setIncidencias, setIncidencia}) => {
         incidenciaServicio.obtenTodas(user.idUsuario).then(({data}) => {
             setIncidencia(null);
             setFiltro(filtro_);
+            setSelectedEstados([]);
             setIncidencias(data);
         }).catch((error) => {
            console.log("error: " + error);

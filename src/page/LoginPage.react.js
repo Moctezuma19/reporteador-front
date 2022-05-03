@@ -20,7 +20,7 @@ const LoginPage = () => {
     const [message, setMessage] = React.useState(null);
     const [password, setPassword] = React.useState("");
     const [usuario, setUsuario] = React.useState("");
-    //const history = useHistory();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!usuario || !password) {
@@ -36,7 +36,6 @@ const LoginPage = () => {
         }
         try {
             let data = await loginUser({correo: usuario, password: password});
-            console.log("data", data)
             if (data === null) {
                 setMessage({texto: "El usuario o contraseña son incorrectos.", type: "warning"})
             } else {

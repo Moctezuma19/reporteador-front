@@ -4,7 +4,7 @@ import {Delete, Edit} from "@mui/icons-material";
 import UsuarioServicio from "../../services/UsuarioServicio";
 import {useNavigate} from "react-router-dom";
 
-const RenglonUsuario = ({idUsuario, handleElimina, style}) => {
+const RenglonUsuario = ({idUsuario, handleElimina, showModal, setShowModal, style}) => {
 
     const usuario_ = {
         correo: "cargando...",
@@ -15,7 +15,6 @@ const RenglonUsuario = ({idUsuario, handleElimina, style}) => {
         }
     }
     const [usuario, setUsuario] = React.useState(usuario_);
-    const [showModal, setShowModal] = React.useState(false);
     const usuarioServicio = React.useMemo(() => new UsuarioServicio(), []);
     const navigate = useNavigate();
 
@@ -27,7 +26,7 @@ const RenglonUsuario = ({idUsuario, handleElimina, style}) => {
         }).catch((error) => {
             console.log("error: " + error);
         });
-    }, []);
+    }, [idUsuario]);
     return (<TableRow>
         <TableCell style={{color: "#717675"}}>
             {usuario?.correo}
@@ -47,7 +46,6 @@ const RenglonUsuario = ({idUsuario, handleElimina, style}) => {
                     <Edit className={"icon-users"} style={{height: 20}}
                           onClick={(e) => {
                               navigate(`/r/usuario?id=${idUsuario}`);
-                              window.location.reload();
                           }}/>
                 </Tooltip>
 
