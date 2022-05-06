@@ -6,11 +6,13 @@ import {Download, NewReleases, ZoomIn} from "@mui/icons-material";
 import {useAuthContext} from "../../context/AuthenticationContext";
 import {useNavigate} from "react-router-dom";
 import {INCIDENCIA_DEFAULT} from "../../util/Constants";
+import ReporteServicio from "../../services/ReporteServicio";
 
 const RenglonIncidencia = ({idIncidencia, setSelectedIncidencia}) => {
     const {user} = useAuthContext();
     const [incidencia, setIncidencia] = React.useState(INCIDENCIA_DEFAULT);
     const incidenciaServicio = React.useMemo(() => new IncidenciaServicio(), []);
+    const reporteServicio = React.useMemo(() => new ReporteServicio(), []);
 
     const navigate = useNavigate();
 
@@ -78,7 +80,25 @@ const RenglonIncidencia = ({idIncidencia, setSelectedIncidencia}) => {
                     }}/>
                 </Tooltip>
                 {user.idRol === 1 && <Tooltip title={"Descargar reporte"}>
-                    <Download className={"icon-users"}/>
+                    <Download className={"icon-users"} onClick={(e) => {
+
+                        reporteServicio.obten(idIncidencia).then(({data}) => {
+
+                            if(typeof data !== "undefined" && data !== null) {
+                                const link = document.createElement('a');
+                                link.href = `data:application/pdf;base64, ${data}`;
+                                link.setAttribute(
+                                    'download',
+                                    `reporte-incidencia-${incidencia.idIncidencia}.pdf`,
+                                );
+                                document.body.appendChild(link);
+                                link.click();
+                                link.parentNode.removeChild(link);
+                            }
+                        }).catch((error) => {
+                            console.log("error: " + error);
+                        });
+                    }}/>
                 </Tooltip>}
 
             </div>

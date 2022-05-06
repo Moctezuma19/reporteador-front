@@ -95,7 +95,6 @@ const DescripcionIncidencia = ({incidencia, setIncidencia, respuestas, cerrable 
             <Typography variant={"h6"}>
                 {incidencia.titulo} {cerrable && <Tooltip title={"Ver individualmente"}><IconButton onClick={(e) => {
                 navigate(`/r/incidencia?id=${incidencia.idIncidencia}`)
-                window.location.reload();
             }}>
                 <ZoomIn/>
             </IconButton></Tooltip>}
